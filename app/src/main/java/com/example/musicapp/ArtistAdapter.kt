@@ -5,11 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicapp.data.entities.Artist
 import com.example.musicapp.databinding.ArtistItemBinding
+import com.example.musicapp.ui.adapters.AdapterItemListener
 import com.squareup.picasso.Picasso
 
 class ArtistAdapter(
     private val artists: MutableList<Artist>,
-    private val listener: ListItemListener
+    private val listener: AdapterItemListener
 ) :
     RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
 
@@ -44,6 +45,3 @@ class ArtistAdapter(
     class ArtistViewHolder(val binding: ArtistItemBinding) : RecyclerView.ViewHolder(binding.root)
 }
 
-interface ListItemListener {
-    fun onItemClick(position: Int)
-}

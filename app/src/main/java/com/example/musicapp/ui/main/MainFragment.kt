@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.musicapp.ArtistAdapter
-import com.example.musicapp.ListItemListener
+import com.example.musicapp.AdapterItemListener
 import com.example.musicapp.R
 import com.example.musicapp.data.entities.Artist
 import com.example.musicapp.databinding.MainFragmentBinding
@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
-class MainFragment : Fragment(), ListItemListener {
+class MainFragment : Fragment(), AdapterItemListener {
 
     private lateinit var binding: MainFragmentBinding
     private val viewModel: MainViewModel by activityViewModels()

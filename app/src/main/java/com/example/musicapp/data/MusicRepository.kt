@@ -26,5 +26,5 @@ class MusicRepository @Inject constructor(
 
     suspend fun searchArtists(name: String) = dataSource.searchArtists(name)
 
-    fun getSuggestions(name: String) = dataSource.searchArtistsRxJava(name)
+    fun getSuggestions(name: String) = dataSource.searchArtistsSuggestions(name)
 }

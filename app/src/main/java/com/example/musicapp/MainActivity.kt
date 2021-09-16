@@ -2,7 +2,6 @@ package com.example.musicapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -21,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-
+        navView.selectedItemId = R.id.mainFragment
         val navController = findNavController(R.id.navHostFragment)
         val appBarConfiguration = AppBarConfiguration(setOf(
             R.id.chartsFragment,

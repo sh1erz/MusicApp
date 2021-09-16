@@ -6,3 +6,4 @@ data class Search<T : Searchable>(
     val total: Int,
     val next: String
 )
+
