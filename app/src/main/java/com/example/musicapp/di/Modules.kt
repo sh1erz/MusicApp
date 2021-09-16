@@ -16,3 +16,44 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+@Module
+@InstallIn(SingletonComponent::class)
+class RetrofitModule {
+
+    @Provides
+    fun provideService(): DeezerService {
+        val client = OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val request = chain.request()
+                Log.i(LOG, "url: ${request.url()}")
+                chain.proceed(request)
+            }.build()
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build().create(DeezerService::class.java)
+    }
+
+    companion object {
+        const val BASE_URL = "https://api.deezer.com/"
+    }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+class RoomModule {
+
+    @Provides
+    fun provideRoom(
+        @ApplicationContext applicationContext: Context
+    ): ArtistDatabase = Room.databaseBuilder(
+        applicationContext,
+        ArtistDatabase::class.java,
+        "music.db"
+    ).build()
+
+    @Provides
+    fun provideArtistDao(db: ArtistDatabase): ArtistDao = db.getArtistDao()
+}
+

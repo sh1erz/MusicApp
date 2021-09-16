@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        navView.selectedItemId = R.id.mainFragment
         val navController = findNavController(R.id.navHostFragment)
         val appBarConfiguration = AppBarConfiguration(setOf(
             R.id.chartsFragment,
@@ -28,5 +27,6 @@ class MainActivity : AppCompatActivity() {
             R.id.searchFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        navView.selectedItemId = R.id.mainFragment
     }
 }

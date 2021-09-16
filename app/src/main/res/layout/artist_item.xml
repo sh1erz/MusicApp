@@ -29,4 +29,5 @@
         app:layout_constraintStart_toEndOf="@+id/imgArtist"
         app:layout_constraintTop_toTopOf="@+id/imgArtist"
         tools:text="TextViewnlnln klnlnl ln;nkn kln;n;n" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

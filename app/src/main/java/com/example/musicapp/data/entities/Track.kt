@@ -1,7 +1,12 @@
 package com.example.musicapp.data.entities
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
 data class Track(
-    val id: String,
+    @PrimaryKey
+    val id: Long,
     val title: String,
     val link: String,
     val share: String?,

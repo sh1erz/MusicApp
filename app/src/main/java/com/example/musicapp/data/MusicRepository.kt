@@ -3,6 +3,7 @@ package com.example.musicapp.data
 import androidx.lifecycle.LiveData
 import com.example.musicapp.data.db.ArtistDao
 import com.example.musicapp.data.entities.Artist
+import com.example.musicapp.data.entities.Track
 import com.example.musicapp.retrofit.DeezerService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -22,9 +23,15 @@ class MusicRepository @Inject constructor(
         artistDao.insertArtists(artists)
     }
 
+    suspend fun addTrack(track : Track) = withContext(Dispatchers.IO) {
+        artistDao.insertTrack(track)
+    }
+
     private fun deleteAllArtists() = artistDao.clear()
 
     suspend fun searchArtists(name: String) = dataSource.searchArtists(name)
+
+    suspend fun searchTracks(title: String) = dataSource.searchTracks(title)
 
     fun getSuggestions(name: String) = dataSource.searchArtistsSuggestions(name)
 }
