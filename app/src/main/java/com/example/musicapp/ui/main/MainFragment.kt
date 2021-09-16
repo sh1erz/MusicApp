@@ -16,10 +16,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.musicapp.ArtistAdapter
-import com.example.musicapp.AdapterItemListener
 import com.example.musicapp.R
 import com.example.musicapp.data.entities.Artist
 import com.example.musicapp.databinding.MainFragmentBinding
+import com.example.musicapp.ui.adapters.AdapterItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
