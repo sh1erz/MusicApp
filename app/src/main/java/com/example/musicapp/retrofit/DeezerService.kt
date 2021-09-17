@@ -11,15 +11,27 @@ interface DeezerService {
     fun getGenres(): Genres
 
     @GET("chart/{genre_id}/tracks")
-    fun getTopTracksByGenre(@Path("genre_id") genreId: Int, @Query("limit") limit: Int = 25): Chart
+    fun getTopTracksByGenre(
+        @Path("genre_id") genreId: Int,
+        @Query("limit") limit: Int = 25,
+        @Query("index") index: Int
+    ): Chart
 
 
     //search
     @GET("search/artist")
-    suspend fun searchArtists(@Query("q") artistName: String): Search<Artist>
+    suspend fun searchArtists(
+        @Query("q") artistName: String,
+        @Query("limit") limit: Int = 25,
+        @Query("index") index: Int = 0
+    ): Search<Artist>
 
     @GET("search/track")
-    suspend fun searchTracks(@Query("q") trackName: String): Search<Track>
+    suspend fun searchTracks(
+        @Query("q") trackName: String,
+        @Query("limit") limit: Int = 25,
+        @Query("index") index: Int = 0
+    ): Search<Track>
 
     @GET("search/artist")
     suspend fun searchArtistsSuggestions(

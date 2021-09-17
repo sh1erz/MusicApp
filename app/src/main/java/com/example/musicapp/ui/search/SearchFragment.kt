@@ -14,7 +14,9 @@ import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.musicapp.R
+import com.example.musicapp.data.entities.Searchable
 import com.example.musicapp.databinding.FragmentSearchBinding
+import com.example.musicapp.ui.adapters.AdapterItemListener
 import com.example.musicapp.ui.main.LOG
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.ObservableOnSubscribe
@@ -24,11 +26,12 @@ import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), AdapterItemListener {
 
     private lateinit var binding: FragmentSearchBinding
     private lateinit var viewModel: SearchViewModel
     private lateinit var cursorAdapter: SimpleCursorAdapter
+    private val recyclerAdapter: SearchAdapter = SearchAdapter(mutableListOf(), this)
 
     private val subscriber = object : Observer<List<String>> {
         override fun onNext(names: List<String>) {
@@ -44,7 +47,7 @@ class SearchFragment : Fragment() {
         }
 
         override fun onError(e: Throwable) {
-            Log.i(LOG, "subscr err: ${e.message ?: "no mess"}")
+            Log.i(LOG, "  -- subscr err: ${e.message ?: "no mess"}")
         }
 
         override fun onComplete() {
@@ -68,6 +71,9 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(SearchViewModel::class.java)
         cursorAdapter = getAdapter()
+        binding.recyclerSearch.adapter = recyclerAdapter
+
+
     }
 
 
@@ -98,7 +104,11 @@ class SearchFragment : Fragment() {
                 }
 
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    query?.let { viewModel.searchArtists(it) } //todo
+                    query?.let {
+                        viewModel.search(it).observe(viewLifecycleOwner) { items ->
+                            retrieveList(items)
+                        }
+                    }
                     return true
                 }
             })
@@ -122,6 +132,11 @@ class SearchFragment : Fragment() {
 
     }
 
+    override fun onItemClick(position: Int) {
+
+    }
+
+
     private fun getAdapter(): SimpleCursorAdapter {
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
         val to = intArrayOf(R.id.tvItem)
@@ -134,5 +149,13 @@ class SearchFragment : Fragment() {
             CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER
         )
     }
+
+    private fun retrieveList(items: List<Searchable>) {
+        recyclerAdapter.apply {
+            addItems(items)
+            notifyItemRangeInserted(itemCount, items.size)
+        }
+    }
+
 
 }

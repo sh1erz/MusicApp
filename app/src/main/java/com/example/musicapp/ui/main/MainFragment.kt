@@ -69,7 +69,6 @@ class MainFragment : Fragment(), AdapterItemListener {
         savedInstanceState: Bundle?
     ): View {
         binding = MainFragmentBinding.inflate(layoutInflater, container, false)
-        Log.i(LOG, "viewModel: $viewModel")
         return binding.root
     }
 

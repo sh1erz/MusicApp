@@ -23,16 +23,21 @@ class MusicRepository @Inject constructor(
         artistDao.insertArtists(artists)
     }
 
-    suspend fun addTrack(track : Track) = withContext(Dispatchers.IO) {
+    suspend fun addTrack(track: Track) = withContext(Dispatchers.IO) {
         artistDao.insertTrack(track)
     }
 
     private fun deleteAllArtists() = artistDao.clear()
 
-    suspend fun searchArtists(name: String) = dataSource.searchArtists(name)
+    suspend fun searchArtists(name: String, limit: Int = 25, index: Int = 0) =
+        dataSource.searchArtists(name, limit, index)
 
-    suspend fun searchTracks(title: String) = dataSource.searchTracks(title)
+    suspend fun searchTracks(title: String, limit: Int = 25, index: Int = 0) =
+        dataSource.searchTracks(title, limit, index)
 
-    suspend fun getArtistSuggestions(name: String) = dataSource.searchArtistsSuggestions(name)
-    suspend fun getTrackSuggestions(title: String) = dataSource.searchTracksSuggestions(title)
+    suspend fun getArtistSuggestions(name: String, limit: Int = 2) =
+        dataSource.searchArtistsSuggestions(name, limit)
+
+    suspend fun getTrackSuggestions(title: String, limit: Int = 3) =
+        dataSource.searchTracksSuggestions(title, limit)
 }

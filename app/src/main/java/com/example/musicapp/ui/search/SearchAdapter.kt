@@ -16,6 +16,10 @@ class SearchAdapter(
     private val listener: AdapterItemListener
 ) : RecyclerView.Adapter<SearchAdapter.CustomViewHolder>() {
 
+    fun addItems(newItems: List<Searchable>){
+        items.addAll(newItems)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
