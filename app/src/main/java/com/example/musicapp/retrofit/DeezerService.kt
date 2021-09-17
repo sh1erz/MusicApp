@@ -1,7 +1,6 @@
 package com.example.musicapp.retrofit
 
 import com.example.musicapp.data.entities.*
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -23,16 +22,16 @@ interface DeezerService {
     suspend fun searchTracks(@Query("q") trackName: String): Search<Track>
 
     @GET("search/artist")
-    fun searchArtistsSuggestions(
+    suspend fun searchArtistsSuggestions(
         @Query("q") artistName: String,
-        @Query("limit") limit: Int = 5
-    ): Call<Suggestion<SuggestArtist>>
+        @Query("limit") limit: Int = 2
+    ): Suggestion<SuggestArtist>
 
     @GET("search/track")
-    fun searchTracksSuggestions(
+    suspend fun searchTracksSuggestions(
         @Query("q") artistName: String,
-        @Query("limit") limit: Int = 5
-    ): Call<Suggestion<SuggestTrack>>
+        @Query("limit") limit: Int = 3
+    ): Suggestion<SuggestTrack>
 
 
 }

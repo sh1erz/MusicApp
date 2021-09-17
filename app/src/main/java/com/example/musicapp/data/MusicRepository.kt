@@ -33,5 +33,6 @@ class MusicRepository @Inject constructor(
 
     suspend fun searchTracks(title: String) = dataSource.searchTracks(title)
 
-    fun getSuggestions(name: String) = dataSource.searchArtistsSuggestions(name)
+    suspend fun getArtistSuggestions(name: String) = dataSource.searchArtistsSuggestions(name)
+    suspend fun getTrackSuggestions(title: String) = dataSource.searchTracksSuggestions(title)
 }
