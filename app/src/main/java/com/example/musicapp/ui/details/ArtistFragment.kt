@@ -1,4 +1,4 @@
-package com.example.musicapp
+package com.example.musicapp.ui.details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import com.example.musicapp.ui.main.MainViewModel
 import com.squareup.picasso.Picasso
 
 
-class DetailsFragment : Fragment() {
+class ArtistFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding
     private val viewModel: MainViewModel by activityViewModels()

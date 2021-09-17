@@ -158,7 +158,7 @@ class MainFragment : Fragment(), AdapterItemListener {
 
     override fun onItemClick(position: Int) {
         findNavController().navigate(
-            R.id.action_mainFragment_to_detailsFragment,
+            R.id.action_main_to_artistDetails,
             bundleOf("artist_position" to position)
         )
     }
