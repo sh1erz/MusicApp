@@ -1,5 +1,6 @@
 package com.example.musicapp
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.navHostFragment)
         val appBarConfiguration = AppBarConfiguration(setOf(
             R.id.chartsFragment,
@@ -29,4 +30,19 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
         navView.selectedItemId = R.id.mainFragment
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(SELECTED_FRAGMENT_ID, binding.navView.selectedItemId)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        binding.navView.selectedItemId = savedInstanceState.getInt(SELECTED_FRAGMENT_ID, R.id.mainFragment)
+    }
+
+    companion object{
+        const val SELECTED_FRAGMENT_ID = "selected_fragment_id"
+    }
+
 }

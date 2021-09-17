@@ -12,6 +12,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.cursoradapter.widget.CursorAdapter
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.musicapp.R
 import com.example.musicapp.data.entities.Searchable
@@ -23,13 +24,16 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(), AdapterItemListener {
 
     private lateinit var binding: FragmentSearchBinding
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by activityViewModels()
     private lateinit var cursorAdapter: SimpleCursorAdapter
     private val recyclerAdapter: SearchAdapter = SearchAdapter(mutableListOf(), this)
 
@@ -69,9 +73,12 @@ class SearchFragment : Fragment(), AdapterItemListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(SearchViewModel::class.java)
         cursorAdapter = getAdapter()
+        Log.i(LOG, "onViewCreated: $viewModel")
         binding.recyclerSearch.adapter = recyclerAdapter
+        viewModel.searchedList.observe(viewLifecycleOwner) { items ->
+                reloadList(items)
+        }
 
 
     }
@@ -104,11 +111,7 @@ class SearchFragment : Fragment(), AdapterItemListener {
                 }
 
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    query?.let {
-                        viewModel.search(it).observe(viewLifecycleOwner) { items ->
-                            retrieveList(items)
-                        }
-                    }
+                    query?.let { viewModel.search(it) }
                     return true
                 }
             })
@@ -150,10 +153,10 @@ class SearchFragment : Fragment(), AdapterItemListener {
         )
     }
 
-    private fun retrieveList(items: List<Searchable>) {
+    private fun reloadList(items: List<Searchable>) {
         recyclerAdapter.apply {
-            addItems(items)
-            notifyItemRangeInserted(itemCount, items.size)
+            reloadItems(items)
+            notifyDataSetChanged()
         }
     }
 

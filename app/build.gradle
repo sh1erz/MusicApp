@@ -37,6 +37,9 @@ android {
 }
 
 dependencies {
+    if (IS_CANARY_ENABLED){
+        debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+    }
 
     implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
 

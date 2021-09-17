@@ -16,7 +16,8 @@ class SearchAdapter(
     private val listener: AdapterItemListener
 ) : RecyclerView.Adapter<SearchAdapter.CustomViewHolder>() {
 
-    fun addItems(newItems: List<Searchable>){
+    fun reloadItems(newItems: List<Searchable>){
+        items.clear()
         items.addAll(newItems)
     }
 

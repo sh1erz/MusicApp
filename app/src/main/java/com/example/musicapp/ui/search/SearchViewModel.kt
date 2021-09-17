@@ -1,6 +1,7 @@
 package com.example.musicapp.ui.search
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
@@ -17,6 +18,11 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(private val musicRepository: MusicRepository) :
     ViewModel() {
+
+    private val _searchedList = MutableLiveData<List<Searchable>>(listOf())
+    val searchedList
+        get() = _searchedList
+
     fun searchArtists(name: String) = viewModelScope.launch(Dispatchers.IO) {
         try {
             val artists = musicRepository.searchArtists(name)
@@ -25,7 +31,7 @@ class SearchViewModel @Inject constructor(private val musicRepository: MusicRepo
         }
     }
 
-    fun search(query: String) = liveData<List<Searchable>> {
+    fun search(query: String) = viewModelScope.launch(Dispatchers.IO) {
         try {
             val artists = musicRepository.searchArtists(query, limit = 3)
             val tracks = musicRepository.searchTracks(query)
@@ -34,7 +40,7 @@ class SearchViewModel @Inject constructor(private val musicRepository: MusicRepo
                 addAll(artists.data)
                 addAll(tracks.data)
             }
-            emit(list)
+            _searchedList.postValue(list)
         } catch (ex: Exception) {
             Log.i(LOG, "search: ${ex.message}")
         }
