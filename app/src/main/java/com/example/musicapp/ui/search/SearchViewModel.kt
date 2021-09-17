@@ -21,7 +21,7 @@ class SearchViewModel @Inject constructor(private val musicRepository: MusicRepo
         try {
             val artists = musicRepository.searchArtists(name)
         } catch (ex: Exception) {
-            Log.i(LOG, "${ex.stackTrace} -- " + ex.message ?: "error searching artist")
+            Log.i(LOG, "searchArtists: ${ex.message}")
         }
     }
 
@@ -36,7 +36,7 @@ class SearchViewModel @Inject constructor(private val musicRepository: MusicRepo
             }
             emit(list)
         } catch (ex: Exception) {
-            Log.i(LOG, "${ex.stackTrace} -- " + ex.message ?: "error searching artist")
+            Log.i(LOG, "search: ${ex.message}")
         }
     }
 
@@ -44,7 +44,6 @@ class SearchViewModel @Inject constructor(private val musicRepository: MusicRepo
         return Observable.create { e ->
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    Log.i(LOG, "updateSuggestions")
                     val artists = musicRepository.getArtistSuggestions(query).data.map{it.name}
                     val tracks = musicRepository.getTrackSuggestions(query).data.map { it.title }
                     withContext(Dispatchers.Main) {
@@ -52,28 +51,10 @@ class SearchViewModel @Inject constructor(private val musicRepository: MusicRepo
                         e.onComplete()
                     }
                 } catch (ex: java.lang.Exception) {
-                    Log.i(LOG,
-                        "updateSuggestions ex: ${ex.stackTrace} -- " + ex.message
-                            ?: "error getting suggestions"
-                    )
+                    Log.i(LOG, "updateSuggestions: ${ex.message}")
                     e.onError(ex)
                 }
             }
-            /*musicRepository.getArtistSuggestions(query).enqueue(object :
-                Callback<Suggestion<SuggestArtist>> {
-                override fun onResponse(
-                    call: Call<Suggestion<SuggestArtist>>,
-                    response: Response<Suggestion<SuggestArtist>>
-                ) {
-                    if (response.body() == null) return
-                    e.onNext(response.body()!!.data.map { it.name })
-                    e.onComplete()
-                }
-
-                override fun onFailure(call: Call<Suggestion<SuggestArtist>>, t: Throwable) {
-                    e.onError(t)
-                }
-            })*/
 
         }
     }

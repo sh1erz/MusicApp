@@ -54,7 +54,7 @@ class SearchAdapter(
                     tvTitle.text = track.title
                     tvArtist.text = track.artist.name
                     Picasso.with(picture.context)
-                        .load(track.album.cover_small)
+                        .load(track.album.cover_medium)
                         .into(picture)
                     constraint.setOnClickListener {
                         listener.onItemClick(position)
