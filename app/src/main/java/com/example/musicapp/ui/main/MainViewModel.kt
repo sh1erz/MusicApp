@@ -33,7 +33,7 @@ class MainViewModel @Inject constructor(private val musicRepository: MusicReposi
                     e.onNext(artists.data.map { it.name })
                     e.onComplete()
                 } catch (ex: Exception) {
-                    Log.i(LOG, ex.message ?: "error searching artist")
+                    Log.i(LOG, "updateSuggestions: " + ex.message ?: "error searching artist")
                     e.onError(ex)
                 }
                 /*musicRepository.getArtistSuggestions(query).enqueue(object : Callback<Suggestion<SuggestArtist>> {

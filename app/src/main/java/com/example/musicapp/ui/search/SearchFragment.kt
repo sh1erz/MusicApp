@@ -5,26 +5,34 @@ import android.database.Cursor
 import android.database.MatrixCursor
 import android.os.Bundle
 import android.provider.BaseColumns
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.cursoradapter.widget.CursorAdapter
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.musicapp.R
 import com.example.musicapp.databinding.FragmentSearchBinding
+import com.example.musicapp.ui.main.LOG
+import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
+import io.reactivex.subjects.PublishSubject
+import java.util.concurrent.TimeUnit
 
-
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
-    private val viewModel: SearchViewModel by viewModels()
+    private lateinit var viewModel: SearchViewModel
     private lateinit var cursorAdapter: SimpleCursorAdapter
+
     private val subscriber = object : Observer<List<String>> {
         override fun onNext(names: List<String>) {
+            Log.i(LOG, "search subscriber")
             val cursor = MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
             names.forEachIndexed { index, s ->
                 cursor.addRow(arrayOf(index, s))
@@ -36,6 +44,7 @@ class SearchFragment : Fragment() {
         }
 
         override fun onError(e: Throwable) {
+            Log.i(LOG, "subscr err: ${e.message ?: "no mess"}")
         }
 
         override fun onComplete() {
@@ -57,22 +66,11 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel = ViewModelProvider(requireActivity()).get(SearchViewModel::class.java)
         cursorAdapter = getAdapter()
     }
 
-    private fun getAdapter(): SimpleCursorAdapter {
-        val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
-        val to = intArrayOf(R.id.tvItem)
-        return SimpleCursorAdapter(
-            context,
-            R.layout.search_item,
-            null,
-            from,
-            to,
-            CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER
-        )
-    }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -90,24 +88,24 @@ class SearchFragment : Fragment() {
 
         searchView.suggestionsAdapter = cursorAdapter
 
-        /* PublishSubject.create(ObservableOnSubscribe<String> { subscriber ->
-             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                 override fun onQueryTextChange(newText: String?): Boolean {
-                     if (newText != null && newText.length > 2) {
-                         subscriber.onNext(newText)
-                     }
-                     return true
-                 }
+        PublishSubject.create(ObservableOnSubscribe<String> { subscriber ->
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if (newText != null && newText.length > 2) {
+                        subscriber.onNext(newText)
+                    }
+                    return true
+                }
 
-                 override fun onQueryTextSubmit(query: String?): Boolean {
-                     query?.let { viewModel.searchArtists(it) } //todo
-                     return true
-                 }
-             })
-         }).debounce(2000, TimeUnit.MILLISECONDS)
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let { viewModel.searchArtists(it) } //todo
+                    return true
+                }
+            })
+        }).debounce(500, TimeUnit.MILLISECONDS)
              .switchMap { query -> viewModel.updateSuggestions(query) } //todo
              .subscribe(subscriber)
- */
+
         searchView.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
             override fun onSuggestionSelect(position: Int): Boolean {
                 return false
@@ -122,6 +120,19 @@ class SearchFragment : Fragment() {
             }
         })
 
+    }
+
+    private fun getAdapter(): SimpleCursorAdapter {
+        val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
+        val to = intArrayOf(R.id.tvItem)
+        return SimpleCursorAdapter(
+            context,
+            R.layout.search_item,
+            null,
+            from,
+            to,
+            CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER
+        )
     }
 
 }

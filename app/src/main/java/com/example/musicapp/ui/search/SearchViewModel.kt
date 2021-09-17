@@ -5,17 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.musicapp.data.MusicRepository
 import com.example.musicapp.ui.main.LOG
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class SearchViewModel @Inject constructor(private val musicRepository: MusicRepository) :
     ViewModel() {
     fun searchArtists(name: String) = viewModelScope.launch(Dispatchers.IO) {
         try {
             val artists = musicRepository.searchArtists(name)
-            musicRepository.addArtists(artists.data)
         } catch (ex: Exception) {
             Log.i(LOG, ex.message ?: "error searching artist")
         }
@@ -25,9 +26,10 @@ class SearchViewModel @Inject constructor(private val musicRepository: MusicRepo
         return Observable.create { e ->
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    val artists = musicRepository.getArtistSuggestions(query).data.map { it.name }
-                    val tracks = musicRepository.getTrackSuggestions(query).data.map { it.title }
-                    e.onNext(artists + tracks)
+                    Log.i(LOG,"updateSuggestions")
+                    val artists = musicRepository.getArtistSuggestions(query)
+                 //   val tracks = musicRepository.getTrackSuggestions(query).data.map { it.title }
+                    e.onNext(artists.data.map { it.name })
                     e.onComplete()
                 } catch (ex: java.lang.Exception) {
                     Log.i(LOG, ex.message ?: "error getting suggestions")

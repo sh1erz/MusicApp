@@ -39,9 +39,10 @@ class MainFragment : Fragment(), AdapterItemListener {
     private val recyclerAdapter: ArtistAdapter = ArtistAdapter(mutableListOf(), this)
     private lateinit var cursorAdapter: SimpleCursorAdapter
 
-    private val subscriber = object : Observer<List<String>> {
+    private val subscriberM = object : Observer<List<String>> {
         override fun onNext(names: List<String>) {
             val cursor = MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
+            Log.i(LOG, "main subscriber")
             names.forEachIndexed { index, s ->
                 cursor.addRow(arrayOf(index, s))
             }
@@ -116,9 +117,9 @@ class MainFragment : Fragment(), AdapterItemListener {
                     return true
                 }
             })
-        }).debounce(2000, TimeUnit.MILLISECONDS)
+        }).debounce(500, TimeUnit.MILLISECONDS)
             .switchMap { query -> viewModel.updateSuggestions(query) }
-            .subscribe(subscriber)
+            .subscribe(subscriberM)
 
         searchView.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
             override fun onSuggestionSelect(position: Int): Boolean {
