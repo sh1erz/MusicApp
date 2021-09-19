@@ -23,13 +23,6 @@ class SearchViewModel @Inject constructor(private val musicRepository: MusicRepo
     val searchedList
         get() = _searchedList
 
-    fun searchArtists(name: String) = viewModelScope.launch(Dispatchers.IO) {
-        try {
-            val artists = musicRepository.searchArtists(name)
-        } catch (ex: Exception) {
-            Log.i(LOG, "searchArtists: ${ex.message}")
-        }
-    }
 
     fun search(query: String) = viewModelScope.launch(Dispatchers.IO) {
         try {

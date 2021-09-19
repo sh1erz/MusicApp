@@ -7,10 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.musicapp.R
+import com.example.musicapp.data.entities.Track
 import com.example.musicapp.databinding.FragmentTrackBinding
+import com.example.musicapp.ui.adapters.OnTrackClickListener
 
 
-class TrackFragment : Fragment(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
+class TrackFragment : Fragment(){
+
 
     private lateinit var binding : FragmentTrackBinding
     var mediaPlayer : MediaPlayer? = null
@@ -30,12 +33,6 @@ class TrackFragment : Fragment(), MediaPlayer.OnPreparedListener, MediaPlayer.On
 
     }
 
-    override fun onPrepared(mp: MediaPlayer?) {
-        TODO("Not yet implemented")
-    }
 
-    override fun onCompletion(mp: MediaPlayer?) {
-        TODO("Not yet implemented")
-    }
 
 }

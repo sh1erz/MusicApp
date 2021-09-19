@@ -6,9 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.musicapp.data.entities.Track
 import com.example.musicapp.databinding.TrackItemBinding
 import com.example.musicapp.ui.adapters.AdapterItemListener
+import com.example.musicapp.ui.adapters.OnTrackClickListener
 import com.squareup.picasso.Picasso
 
-class TrackAdapter(val tracks: MutableList<Track>, val listener: AdapterItemListener) :
+class TrackAdapter(val tracks: MutableList<Track>, val trackListener: OnTrackClickListener) :
     RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val binding = TrackItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -23,7 +24,7 @@ class TrackAdapter(val tracks: MutableList<Track>, val listener: AdapterItemList
                     .load(album.cover_small)
                     .into(picture)
                 constraint.setOnClickListener {
-                    listener.onItemClick(position)
+                    trackListener.onTrackItemClick(this@with)
                 }
             }
         }

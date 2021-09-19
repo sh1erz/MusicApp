@@ -8,12 +8,15 @@ import com.example.musicapp.data.entities.Searchable
 import com.example.musicapp.data.entities.Track
 import com.example.musicapp.databinding.ArtistItemBinding
 import com.example.musicapp.databinding.TrackItemBinding
-import com.example.musicapp.ui.adapters.AdapterItemListener
+import com.example.musicapp.ui.adapters.OnArtistClickListener
+import com.example.musicapp.ui.adapters.OnTrackClickListener
 import com.squareup.picasso.Picasso
 
 class SearchAdapter(
     private val items: MutableList<Searchable>,
-    private val listener: AdapterItemListener
+    private val trackListener: OnTrackClickListener,
+    private val artistListener: OnArtistClickListener
+
 ) : RecyclerView.Adapter<SearchAdapter.CustomViewHolder>() {
 
     fun reloadItems(newItems: List<Searchable>){
@@ -43,9 +46,8 @@ class SearchAdapter(
                     Picasso.with(imgArtist.context)
                         .load(artist.picture_medium)
                         .into(imgArtist)
-                    //todo listeners different
                     constraint.setOnClickListener {
-                        listener.onItemClick(position)
+                        artistListener.onArtistItemClick(artist)
                     }
                 }
             }
@@ -58,7 +60,7 @@ class SearchAdapter(
                         .load(track.album.cover_medium)
                         .into(picture)
                     constraint.setOnClickListener {
-                        listener.onItemClick(position)
+                        trackListener.onTrackItemClick(track)
                     }
                 }
             }
@@ -87,6 +89,7 @@ class SearchAdapter(
         constructor(artistBinding: ArtistItemBinding) : super(artistBinding.root) {
             this.artistBinding = artistBinding
         }
+
     }
 
     companion object {

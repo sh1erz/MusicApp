@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.musicapp.data.entities.Artist
 import com.example.musicapp.databinding.FragmentDetailsBinding
+import com.example.musicapp.ui.adapters.OnArtistClickListener
 import com.example.musicapp.ui.main.MainViewModel
 import com.squareup.picasso.Picasso
 
@@ -27,7 +29,7 @@ class ArtistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.getInt("artist_position")?.let { position ->
+        /*arguments?.getInt("artist_position")?.let { position ->
             viewModel.getArtists().observe(viewLifecycleOwner) {
                 val artist = it[position]
                 binding.apply {
@@ -39,9 +41,8 @@ class ArtistFragment : Fragment() {
                 }
 
             }
-        }
+        }*/
 
     }
-
 
 }

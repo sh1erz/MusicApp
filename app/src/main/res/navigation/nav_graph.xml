@@ -17,11 +17,7 @@
             android:id="@+id/action_search_to_trackDetails"
             app:destination="@id/trackFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/chartsFragment"
-        android:name="com.example.musicapp.ChartsFragment"
-        android:label="fragment_charts"
-        tools:layout="@layout/fragment_charts" />
+
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.musicapp.ui.main.MainFragment"
@@ -44,4 +40,8 @@
         android:name="com.example.musicapp.ui.details.TrackFragment"
         android:label="fragment_track"
         tools:layout="@layout/fragment_track" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.musicapp.ui.settings.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>

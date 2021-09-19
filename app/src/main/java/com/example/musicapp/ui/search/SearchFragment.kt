@@ -9,16 +9,24 @@ import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.cursoradapter.widget.CursorAdapter
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.musicapp.R
+import com.example.musicapp.data.entities.Artist
 import com.example.musicapp.data.entities.Searchable
+import com.example.musicapp.data.entities.Track
 import com.example.musicapp.databinding.FragmentSearchBinding
 import com.example.musicapp.ui.adapters.AdapterItemListener
+import com.example.musicapp.ui.adapters.OnArtistClickListener
+import com.example.musicapp.ui.adapters.OnTrackClickListener
+import com.example.musicapp.ui.details.TrackFragment
 import com.example.musicapp.ui.main.LOG
+import com.example.musicapp.ui.main.TrackAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
@@ -30,12 +38,21 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
-class SearchFragment : Fragment(), AdapterItemListener {
+class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
 
     private lateinit var binding: FragmentSearchBinding
     private val viewModel: SearchViewModel by activityViewModels()
     private lateinit var cursorAdapter: SimpleCursorAdapter
-    private val recyclerAdapter: SearchAdapter = SearchAdapter(mutableListOf(), this)
+    private val recyclerAdapter: SearchAdapter = SearchAdapter(kotlin.collections.mutableListOf(), this, this)
+    override fun onArtistItemClick(artist: Artist) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onTrackItemClick(track: Track) {
+        findNavController().navigate(
+            R.id.action_search_to_trackDetails
+        )
+    }
 
     private val subscriber = object : Observer<List<String>> {
         override fun onNext(names: List<String>) {
@@ -57,6 +74,7 @@ class SearchFragment : Fragment(), AdapterItemListener {
         override fun onComplete() {
         }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,11 +152,6 @@ class SearchFragment : Fragment(), AdapterItemListener {
         })
 
     }
-
-    override fun onItemClick(position: Int) {
-
-    }
-
 
     private fun getAdapter(): SimpleCursorAdapter {
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
