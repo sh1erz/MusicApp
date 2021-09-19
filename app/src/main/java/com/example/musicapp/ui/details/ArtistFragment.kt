@@ -10,13 +10,14 @@ import com.example.musicapp.data.entities.Artist
 import com.example.musicapp.databinding.FragmentDetailsBinding
 import com.example.musicapp.ui.adapters.OnArtistClickListener
 import com.example.musicapp.ui.main.MainViewModel
+import com.example.musicapp.ui.search.SearchViewModel
 import com.squareup.picasso.Picasso
 
-
+//todo
 class ArtistFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: SearchViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,9 +30,9 @@ class ArtistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /*arguments?.getInt("artist_position")?.let { position ->
-            viewModel.getArtists().observe(viewLifecycleOwner) {
-                val artist = it[position]
+        arguments?.getInt(ARTIST_POSITION)?.let { position ->
+            viewModel.searchedList.observe(viewLifecycleOwner) {
+                val artist = it[position] as Artist
                 binding.apply {
                     Picasso.with(context)
                         .load(artist.picture_xl)
@@ -41,8 +42,11 @@ class ArtistFragment : Fragment() {
                 }
 
             }
-        }*/
+        }
 
+    }
+    companion object {
+        const val ARTIST_POSITION = "artist_position"
     }
 
 }

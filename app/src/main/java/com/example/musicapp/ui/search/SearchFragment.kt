@@ -24,6 +24,7 @@ import com.example.musicapp.databinding.FragmentSearchBinding
 import com.example.musicapp.ui.adapters.AdapterItemListener
 import com.example.musicapp.ui.adapters.OnArtistClickListener
 import com.example.musicapp.ui.adapters.OnTrackClickListener
+import com.example.musicapp.ui.details.ArtistFragment
 import com.example.musicapp.ui.details.TrackFragment
 import com.example.musicapp.ui.main.LOG
 import com.example.musicapp.ui.main.TrackAdapter
@@ -44,11 +45,14 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
     private val viewModel: SearchViewModel by activityViewModels()
     private lateinit var cursorAdapter: SimpleCursorAdapter
     private val recyclerAdapter: SearchAdapter = SearchAdapter(kotlin.collections.mutableListOf(), this, this)
-    override fun onArtistItemClick(artist: Artist) {
-        TODO("Not yet implemented")
+    override fun onArtistItemClick(position:Int) {
+        findNavController().navigate(
+            R.id.action_search_to_artistDetails,
+            bundleOf(ArtistFragment.ARTIST_POSITION to position )
+        )
     }
 
-    override fun onTrackItemClick(track: Track) {
+    override fun onTrackItemClick(position: Int) {
         findNavController().navigate(
             R.id.action_search_to_trackDetails
         )
