@@ -4,7 +4,9 @@ import com.example.musicapp.data.MusicRepository
 import com.example.musicapp.ui.main.view.IView
 import javax.inject.Inject
 
-class MainPresenter @Inject constructor(val view: IView, val repository : MusicRepository) : IPresenter{
+class MainPresenter(val view: IView) : IPresenter{
+    @Inject
+    lateinit var repository: MusicRepository
     override fun loadTrackHistory() : Boolean {
         return true
     }

@@ -15,6 +15,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
@@ -63,19 +64,12 @@ class RoomModule {
     fun provideTrackDao(db: TrackDatabase): TrackDao = db.getTrackDao()
 }
 
-@Module
+/*@Module
 @InstallIn(FragmentComponent::class)
 abstract class PresenterModule {
     @Binds
     abstract fun bindPresenter(presenter: MainPresenter): IPresenter
-}
-
-@Module
-@InstallIn(FragmentComponent::class)
-abstract class ViewModule {
-    @Binds
-    abstract fun bindView(view: MainFragment): IView
-}
+}*/
 
 
 
