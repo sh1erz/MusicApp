@@ -3,10 +3,10 @@ package com.example.musicapp.ui.search
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.musicapp.data.MusicRepository
 import com.example.musicapp.data.entities.Searchable
+import com.example.musicapp.data.entities.Track
 import com.example.musicapp.ui.main.LOG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
@@ -23,6 +23,10 @@ class SearchViewModel @Inject constructor(private val musicRepository: MusicRepo
     val searchedList
         get() = _searchedList
 
+    fun getTrackById(id:Int) = musicRepository.getTrackById(id)
+
+    fun addTrack(track: Track) =
+        viewModelScope.launch(Dispatchers.IO) { musicRepository.addTrack(track) }
 
     fun search(query: String) = viewModelScope.launch(Dispatchers.IO) {
         try {

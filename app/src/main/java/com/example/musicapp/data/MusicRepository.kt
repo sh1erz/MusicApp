@@ -13,21 +13,13 @@ class MusicRepository @Inject constructor(
     private val trackDao: TrackDao,
     private val dataSource: DeezerService
 ) {
-    //fun getSavedArtists(): LiveData<List<Artist>> = artistDao.getAll()
-
-    /* suspend fun addArtists(artists: List<Artist>) = withContext(Dispatchers.IO) {
-         val deferred = async { deleteAllArtists() }
-         deferred.await()
-         artistDao.insertArtists(artists)
-     }*/
-
-
-    //private fun deleteAllArtists() = artistDao.clear()
 
     suspend fun searchArtists(name: String, limit: Int = 25, index: Int = 0) =
         dataSource.searchArtists(name, limit, index)
 
     fun getAllTracks(): LiveData<List<Track>> = trackDao.getAllTracks()
+
+    fun getTrackById(id:Int): Track = trackDao.getTrackById(id)
 
     suspend fun addTrack(track: Track) = withContext(Dispatchers.IO) {
         trackDao.insertTrack(track)

@@ -6,19 +6,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface DeezerService {
-    //for charts
-    @GET("genre")
-    fun getGenres(): Genres
 
-    @GET("chart/{genre_id}/tracks")
-    fun getTopTracksByGenre(
-        @Path("genre_id") genreId: Int,
-        @Query("limit") limit: Int = 25,
-        @Query("index") index: Int
-    ): Chart
-
-
-    //search
     @GET("search/artist")
     suspend fun searchArtists(
         @Query("q") artistName: String,

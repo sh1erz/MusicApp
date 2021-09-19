@@ -5,7 +5,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.musicapp.data.entities.Artist
 import com.example.musicapp.data.entities.Track
 
 @Dao
@@ -18,6 +17,9 @@ interface TrackDao {
 
     @Query("SELECT * FROM track")
     fun getAllTracks(): LiveData<List<Track>>
+
+    @Query("SELECT * FROM track WHERE id=:id")
+    fun getTrackById(id: Int) : Track
 
     @Query("DELETE FROM track")
     fun clear()

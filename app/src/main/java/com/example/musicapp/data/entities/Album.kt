@@ -1,9 +1,9 @@
 package com.example.musicapp.data.entities
 
-import android.net.Uri
-import java.net.URL
-import java.util.*
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Album(
     val id: Int,
     val title: String,
@@ -15,8 +15,7 @@ data class Album(
     val cover_big: String,
     val cover_xl: String,
     val genre_id: String,
-    val genres: List<Genre>?,
-    val duration : Int?,
+    val duration: Int?,
     val tracklist: String?,
-    val tracks : List<Track>?
-) :Searchable
+    val tracks: List<Track>?
+) : Searchable, Parcelable

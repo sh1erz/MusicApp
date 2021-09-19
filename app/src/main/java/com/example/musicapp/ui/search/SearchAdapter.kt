@@ -47,7 +47,7 @@ class SearchAdapter(
                         .load(artist.picture_medium)
                         .into(imgArtist)
                     constraint.setOnClickListener {
-                        artistListener.onArtistItemClick(position)
+                        artistListener.onArtistItemClick(artist)
                     }
                 }
             }
@@ -60,7 +60,7 @@ class SearchAdapter(
                         .load(track.album.cover_medium)
                         .into(picture)
                     constraint.setOnClickListener {
-                        trackListener.onTrackItemClick(position)
+                        trackListener.onTrackItemClick(track)
                     }
                 }
             }

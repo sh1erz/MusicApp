@@ -14,28 +14,22 @@ import androidx.cursoradapter.widget.CursorAdapter
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.musicapp.R
 import com.example.musicapp.data.entities.Artist
 import com.example.musicapp.data.entities.Searchable
 import com.example.musicapp.data.entities.Track
 import com.example.musicapp.databinding.FragmentSearchBinding
-import com.example.musicapp.ui.adapters.AdapterItemListener
 import com.example.musicapp.ui.adapters.OnArtistClickListener
 import com.example.musicapp.ui.adapters.OnTrackClickListener
 import com.example.musicapp.ui.details.ArtistFragment
 import com.example.musicapp.ui.details.TrackFragment
 import com.example.musicapp.ui.main.LOG
-import com.example.musicapp.ui.main.TrackAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -44,17 +38,18 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
     private lateinit var binding: FragmentSearchBinding
     private val viewModel: SearchViewModel by activityViewModels()
     private lateinit var cursorAdapter: SimpleCursorAdapter
-    private val recyclerAdapter: SearchAdapter = SearchAdapter(kotlin.collections.mutableListOf(), this, this)
-    override fun onArtistItemClick(position:Int) {
+    private val recyclerAdapter: SearchAdapter = SearchAdapter(mutableListOf(), this, this)
+    override fun onArtistItemClick(artist: Artist) {
         findNavController().navigate(
             R.id.action_search_to_artistDetails,
-            bundleOf(ArtistFragment.ARTIST_POSITION to position )
+            bundleOf(ArtistFragment.ARTIST to artist)
         )
     }
 
-    override fun onTrackItemClick(position: Int) {
+    override fun onTrackItemClick(track: Track) {
         findNavController().navigate(
-            R.id.action_search_to_trackDetails
+            R.id.action_search_to_trackDetails,
+            bundleOf(TrackFragment.TRACK to track)
         )
     }
 

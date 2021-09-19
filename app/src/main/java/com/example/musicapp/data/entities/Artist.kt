@@ -1,9 +1,12 @@
 package com.example.musicapp.data.entities
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
 @Entity
+@Parcelize
 data class Artist(
     @PrimaryKey
     val id: Int,
@@ -18,5 +21,5 @@ data class Artist(
     val nb_album: Int?,
     val nb_fan: Int?,
     val tracklist: String
-) : Searchable
+) : Searchable, Parcelable
 

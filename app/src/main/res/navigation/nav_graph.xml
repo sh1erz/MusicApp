@@ -34,7 +34,7 @@
         android:id="@+id/artistFragment"
         android:name="com.example.musicapp.ui.details.ArtistFragment"
         android:label="fragment_details"
-        tools:layout="@layout/fragment_details" />
+        tools:layout="@layout/fragment_artist" />
     <fragment
         android:id="@+id/trackFragment"
         android:name="com.example.musicapp.ui.details.TrackFragment"

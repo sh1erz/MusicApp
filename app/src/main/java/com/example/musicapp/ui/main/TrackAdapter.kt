@@ -24,7 +24,7 @@ class TrackAdapter(val tracks: MutableList<Track>, val trackListener: OnTrackCli
                     .load(album.cover_small)
                     .into(picture)
                 constraint.setOnClickListener {
-                    trackListener.onTrackItemClick(position)
+                    trackListener.onTrackItemClick(this@with)
                 }
             }
         }
