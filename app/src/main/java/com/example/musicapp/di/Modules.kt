@@ -7,9 +7,15 @@ import com.example.musicapp.data.db.TrackDao
 import com.example.musicapp.data.db.TrackDatabase
 import com.example.musicapp.retrofit.DeezerService
 import com.example.musicapp.ui.main.LOG
+import com.example.musicapp.ui.main.presenter.IPresenter
+import com.example.musicapp.ui.main.presenter.MainPresenter
+import com.example.musicapp.ui.main.view.IView
+import com.example.musicapp.ui.main.view.MainFragment
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
@@ -56,4 +62,20 @@ class RoomModule {
     @Provides
     fun provideTrackDao(db: TrackDatabase): TrackDao = db.getTrackDao()
 }
+
+@Module
+@InstallIn(FragmentComponent::class)
+abstract class PresenterModule {
+    @Binds
+    abstract fun bindPresenter(presenter: MainPresenter): IPresenter
+}
+
+@Module
+@InstallIn(FragmentComponent::class)
+abstract class ViewModule {
+    @Binds
+    abstract fun bindView(view: MainFragment): IView
+}
+
+
 

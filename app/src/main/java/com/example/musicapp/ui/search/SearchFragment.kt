@@ -47,6 +47,8 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
     }
 
     override fun onTrackItemClick(track: Track) {
+        //add to db
+        viewModel.addTrack(track)
         findNavController().navigate(
             R.id.action_search_to_trackDetails,
             bundleOf(TrackFragment.TRACK to track)

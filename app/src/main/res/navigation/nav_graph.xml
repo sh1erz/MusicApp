@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.musicapp.ui.main.MainFragment"
+        android:name="com.example.musicapp.ui.main.view.MainFragment"
         android:label="main_fragment"
         tools:layout="@layout/main_fragment" >
         <action

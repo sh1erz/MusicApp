@@ -1,21 +1,19 @@
 package com.example.musicapp.ui.main
 
-import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.musicapp.data.MusicRepository
+import com.example.musicapp.data.entities.Track
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.Observable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+/*
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val musicRepository: MusicRepository) :
     ViewModel() {
-
-
+        fun getListenedTracks() : LiveData<List<Track>> = musicRepository.getAllTracks()
 }
+*/
 
 
 const val LOG = "my_logs"
