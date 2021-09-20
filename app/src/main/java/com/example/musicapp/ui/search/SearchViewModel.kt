@@ -7,9 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.musicapp.data.MusicRepository
 import com.example.musicapp.data.entities.Searchable
 import com.example.musicapp.data.entities.Track
-import com.example.musicapp.ui.main.LOG
+import com.example.musicapp.ui.main.model.LOG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -22,11 +23,12 @@ class SearchViewModel @Inject constructor(private val musicRepository: MusicRepo
     private val _searchedList = MutableLiveData<List<Searchable>>(listOf())
     val searchedList
         get() = _searchedList
+    val publishSubject: PublishSubject<String> = PublishSubject.create()
 
-    fun getTrackById(id:Int) = musicRepository.getTrackById(id)
+    fun getTrackById(id:Long) = musicRepository.getTrackById(id)
 
     fun addTrack(track: Track) =
-        viewModelScope.launch(Dispatchers.IO) { musicRepository.addTrack(track) }
+        viewModelScope.launch(Dispatchers.IO) { musicRepository.addTrackUpIfExists(track) }
 
     fun search(query: String) = viewModelScope.launch(Dispatchers.IO) {
         try {

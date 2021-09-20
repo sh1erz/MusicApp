@@ -24,9 +24,6 @@
         android:label="main_fragment"
         tools:layout="@layout/main_fragment" >
         <action
-            android:id="@+id/action_main_to_artistDetails"
-            app:destination="@id/artistFragment" />
-        <action
             android:id="@+id/action_main_to_trackDetails"
             app:destination="@id/trackFragment" />
     </fragment>

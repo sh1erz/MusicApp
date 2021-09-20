@@ -6,9 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.musicapp.data.entities.Track
 import com.example.musicapp.databinding.TrackItemBinding
 import com.example.musicapp.ui.adapters.OnTrackClickListener
+import com.example.musicapp.ui.main.presenter.IPresenter
 import com.squareup.picasso.Picasso
 
-class TrackAdapter(val tracks: MutableList<Track>, val trackListener: OnTrackClickListener) :
+class TrackAdapter(
+    private val presenter: IPresenter
+) :
     RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val binding = TrackItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -16,20 +19,21 @@ class TrackAdapter(val tracks: MutableList<Track>, val trackListener: OnTrackCli
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        with(tracks[position]) {
-            holder.binding.apply {
-                tvTitle.text = title
-                Picasso.with(picture.context)
-                    .load(album.cover_small)
-                    .into(picture)
-                constraint.setOnClickListener {
-                    trackListener.onTrackItemClick(this@with)
-                }
-            }
-        }
+        presenter.onBindTrackRowView(position, holder)
     }
 
-    override fun getItemCount(): Int = tracks.size
+    override fun getItemCount(): Int =
+        presenter.getItemsCount()
 
-    class TrackViewHolder(val binding: TrackItemBinding) : RecyclerView.ViewHolder(binding.root)
+    class TrackViewHolder(private val binding: TrackItemBinding) :
+        RecyclerView.ViewHolder(binding.root),
+        TrackRowView {
+        override fun setView(listener: OnTrackClickListener, track: Track) {
+            Picasso.with(binding.picture.context)
+                .load(track.album.cover_medium)
+                .into(binding.picture)
+            binding.constraint.setOnClickListener { listener.onTrackItemClick(track) }
+
+        }
+    }
 }

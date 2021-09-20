@@ -1,10 +1,11 @@
 package com.example.musicapp.ui.main.presenter
 
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.FragmentComponent
+import com.example.musicapp.data.entities.Track
+import com.example.musicapp.ui.main.view.TrackRowView
 
 
 interface IPresenter {
-    fun loadTrackHistory() : Boolean
+    fun onBindTrackRowView(position :Int, holder: TrackRowView)
+    fun loadTrackHistory()
+    fun getItemsCount():Int
 }

@@ -19,11 +19,11 @@ class MusicRepository @Inject constructor(
 
     fun getAllTracks(): LiveData<List<Track>> = trackDao.getAllTracks()
 
-    fun getTrackById(id:Int): Track = trackDao.getTrackById(id)
+    fun getTrackById(id:Long): Track = trackDao.getTrackById(id)
 
-    suspend fun addTrack(track: Track) = withContext(Dispatchers.IO) {
-        trackDao.insertTrack(track)
-    }
+    suspend fun addTrackUpIfExists(track: Track) =
+        trackDao.insertTrackUpIfExists(track)
+
 
     suspend fun searchTracks(title: String, limit: Int = 25, index: Int = 0) =
         dataSource.searchTracks(title, limit, index)

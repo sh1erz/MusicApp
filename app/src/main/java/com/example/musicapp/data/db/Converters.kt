@@ -16,8 +16,8 @@ class Converters {
     fun fromArtistList(list: List<Artist>?): String = Gson().toJson(list)
 
     @TypeConverter
-    fun toArtistList(s: String): List<Artist> =
-        Gson().fromJson(s, Array<Artist>::class.java).toList()
+    fun toArtistList(s: String?): List<Artist>? =
+        Gson().fromJson(s, Array<Artist>::class.java)?.toList()
 
     @TypeConverter
     fun fromAlbum(album: Album?): String = Gson().toJson(album)

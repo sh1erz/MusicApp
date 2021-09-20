@@ -24,12 +24,11 @@ import com.example.musicapp.ui.adapters.OnArtistClickListener
 import com.example.musicapp.ui.adapters.OnTrackClickListener
 import com.example.musicapp.ui.details.ArtistFragment
 import com.example.musicapp.ui.details.TrackFragment
-import com.example.musicapp.ui.main.LOG
+import com.example.musicapp.ui.main.model.LOG
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -39,6 +38,28 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
     private val viewModel: SearchViewModel by activityViewModels()
     private lateinit var cursorAdapter: SimpleCursorAdapter
     private val recyclerAdapter: SearchAdapter = SearchAdapter(mutableListOf(), this, this)
+    private val disposables = CompositeDisposable()
+        private val subscriber = object : Observer<List<String>> {
+        override fun onNext(names: List<String>) {
+            val cursor = MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
+            names.forEachIndexed { index, s ->
+                cursor.addRow(arrayOf(index, s))
+            }
+            cursorAdapter.changeCursor(cursor)
+        }
+
+        override fun onSubscribe(d: Disposable) {
+            disposables.add(d)
+        }
+
+        override fun onError(e: Throwable) {
+            Log.i(LOG, "  -- subscriber onError err: ${e.message ?: "no mess"}")
+        }
+
+        override fun onComplete() {
+        }
+    }
+
     override fun onArtistItemClick(artist: Artist) {
         findNavController().navigate(
             R.id.action_search_to_artistDetails,
@@ -53,27 +74,6 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
             R.id.action_search_to_trackDetails,
             bundleOf(TrackFragment.TRACK to track)
         )
-    }
-
-    private val subscriber = object : Observer<List<String>> {
-        override fun onNext(names: List<String>) {
-            Log.i(LOG, "search subscriber")
-            val cursor = MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
-            names.forEachIndexed { index, s ->
-                cursor.addRow(arrayOf(index, s))
-            }
-            cursorAdapter.changeCursor(cursor)
-        }
-
-        override fun onSubscribe(d: Disposable) {
-        }
-
-        override fun onError(e: Throwable) {
-            Log.i(LOG, "  -- subscr err: ${e.message ?: "no mess"}")
-        }
-
-        override fun onComplete() {
-        }
     }
 
 
@@ -98,10 +98,12 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
         viewModel.searchedList.observe(viewLifecycleOwner) { items ->
                 reloadList(items)
         }
-
-
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        disposables.dispose()
+    }
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -120,23 +122,22 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
 
         searchView.suggestionsAdapter = cursorAdapter
 
-        PublishSubject.create(ObservableOnSubscribe<String> { subscriber ->
-            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    if (newText != null && newText.length > 2) {
-                        subscriber.onNext(newText)
-                    }
-                    return true
+        viewModel.publishSubject.debounce(500, TimeUnit.MILLISECONDS)
+            .switchMap { query -> viewModel.updateSuggestions(query) }
+            .subscribe(subscriber)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null && newText.length > 2) {
+                    viewModel.publishSubject.onNext(newText)
                 }
+                return true
+            }
 
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    query?.let { viewModel.search(it) }
-                    return true
-                }
-            })
-        }).debounce(500, TimeUnit.MILLISECONDS)
-             .switchMap { query -> viewModel.updateSuggestions(query) } //todo
-             .subscribe(subscriber)
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let { viewModel.search(it) }
+                return true
+            }
+        })
 
         searchView.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
             override fun onSuggestionSelect(position: Int): Boolean {
