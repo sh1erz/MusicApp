@@ -12,13 +12,14 @@ import com.squareup.picasso.Picasso
 
 class ArtistFragment : Fragment() {
 
-    private lateinit var binding: FragmentArtistBinding
+    private var _binding: FragmentArtistBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentArtistBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentArtistBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -34,7 +35,11 @@ class ArtistFragment : Fragment() {
                 tvLink.text = artist.link.toString()
             }
         }
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
     companion object {
         const val ARTIST = "artist"

@@ -34,10 +34,11 @@ import java.util.concurrent.TimeUnit
 @AndroidEntryPoint
 class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
 
-    private lateinit var binding: FragmentSearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: SearchViewModel by activityViewModels()
     private lateinit var cursorAdapter: SimpleCursorAdapter
-    private val recyclerAdapter: SearchAdapter = SearchAdapter(mutableListOf(), this, this)
+    //private val recyclerAdapter: SearchAdapter = SearchAdapter(mutableListOf(), this, this)
     private val disposables = CompositeDisposable()
         private val subscriber = object : Observer<List<String>> {
         override fun onNext(names: List<String>) {
@@ -86,7 +87,7 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSearchBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentSearchBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -94,17 +95,11 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
         super.onViewCreated(view, savedInstanceState)
         cursorAdapter = getAdapter()
         Log.i(LOG, "onViewCreated: $viewModel")
-        binding.recyclerSearch.adapter = recyclerAdapter
+        binding.recyclerSearch.adapter = SearchAdapter(mutableListOf(), this, this)
         viewModel.searchedList.observe(viewLifecycleOwner) { items ->
                 reloadList(items)
         }
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        disposables.dispose()
-    }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -169,10 +164,16 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
     }
 
     private fun reloadList(items: List<Searchable>) {
-        recyclerAdapter.apply {
+        (binding.recyclerSearch.adapter as SearchAdapter).apply {
             reloadItems(items)
             notifyDataSetChanged()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        disposables.dispose()
     }
 
 

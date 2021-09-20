@@ -21,7 +21,7 @@ class MusicRepository @Inject constructor(
 
     fun getTrackById(id:Long): Track = trackDao.getTrackById(id)
 
-    suspend fun addTrackUpIfExists(track: Track) =
+    fun addTrackUpIfExists(track: Track) =
         trackDao.insertTrackUpIfExists(track)
 
 

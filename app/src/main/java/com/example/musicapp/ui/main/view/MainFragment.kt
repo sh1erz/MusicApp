@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.musicapp.R
@@ -24,7 +23,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainFragment : Fragment(), IView {
 
-    private lateinit var binding: MainFragmentBinding
+    private var _binding: MainFragmentBinding? = null
+    private val binding get() = _binding!!
     private lateinit var presenter: IPresenter
 
     override fun onCreateView(
@@ -32,7 +32,7 @@ class MainFragment : Fragment(), IView {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = MainFragmentBinding.inflate(inflater,container, false)
+        _binding = MainFragmentBinding.inflate(inflater,container, false)
         return binding.root
     }
 
@@ -49,6 +49,11 @@ class MainFragment : Fragment(), IView {
     override fun showDetails(parcelable: Parcelable) {
         findNavController()
             .navigate(R.id.action_main_to_trackDetails, bundleOf(TrackFragment.TRACK to parcelable))
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }
