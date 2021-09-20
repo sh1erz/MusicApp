@@ -1,6 +1,7 @@
 package com.example.musicapp
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -20,11 +21,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val navView: BottomNavigationView = binding.navView
-        val navController = findNavController(R.id.navHostFragment)
-        val appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.settingsFragment,
-            R.id.mainFragment,
-            R.id.searchFragment))
+        val navController = findNavController(R.id.navHostFragment).apply {
+            addOnDestinationChangedListener { _, _, args ->
+                if (args?.getBoolean("ShowNavBar") == false) {
+                    navView.visibility = View.GONE
+                } else navView.visibility = View.VISIBLE
+            }
+        }
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.settingsFragment,
+                R.id.mainFragment,
+                R.id.searchFragment
+            )
+        )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         navView.selectedItemId = R.id.mainFragment

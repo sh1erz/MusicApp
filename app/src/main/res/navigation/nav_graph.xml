@@ -31,12 +31,20 @@
         android:id="@+id/artistFragment"
         android:name="com.example.musicapp.ui.details.ArtistFragment"
         android:label="fragment_details"
-        tools:layout="@layout/fragment_artist" />
+        tools:layout="@layout/fragment_artist">
+        <argument
+            android:name="ShowNavBar"
+            android:defaultValue="false" />
+    </fragment>
     <fragment
         android:id="@+id/trackFragment"
         android:name="com.example.musicapp.ui.details.TrackFragment"
         android:label="fragment_track"
-        tools:layout="@layout/fragment_track" />
+        tools:layout="@layout/fragment_track">
+        <argument
+            android:name="ShowNavBar"
+            android:defaultValue="false" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.musicapp.ui.settings.SettingsFragment"
