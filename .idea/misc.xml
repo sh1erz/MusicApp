@@ -4,13 +4,14 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/drawable-v24/ic_baseline_search_24.xml" value="0.1" />
+        <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout-land/fragment_track.xml" value="0.21516754850088182" />
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout/artist_item.xml" value="0.264" />
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout/fragment_artist.xml" value="0.1" />
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout/fragment_charts.xml" value="0.1" />
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout/fragment_details.xml" value="0.11510416666666666" />
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout/fragment_search.xml" value="0.1703125" />
-        <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout/fragment_track.xml" value="0.21829710144927536" />
+        <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout/fragment_track.xml" value="0.1" />
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout/main_fragment.xml" value="0.15052083333333333" />
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout/search_item.xml" value="0.12552083333333333" />
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout/test.xml" value="0.12916666666666668" />
