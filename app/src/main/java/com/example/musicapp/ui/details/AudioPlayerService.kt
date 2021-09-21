@@ -61,12 +61,17 @@ class AudioPlayerService : Service() {
         val channelId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
         } else ""
+        val returnIntent =Intent(
+            this,
+            MainActivity::class.java
+        ).apply {
+            action = Intent.ACTION_MAIN
+            addCategory(Intent.CATEGORY_LAUNCHER)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
         val pendingIntent =
             PendingIntent.getActivity(
-                this, 0, Intent(
-                    this,
-                    MainActivity::class.java
-                ), PendingIntent.FLAG_UPDATE_CURRENT
+                this, 0, returnIntent , PendingIntent.FLAG_UPDATE_CURRENT
             )
         // play button intent
         val playIntent = Intent(this, this::class.java).apply {
