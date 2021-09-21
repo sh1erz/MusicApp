@@ -22,7 +22,6 @@ import java.io.IOException
 class AudioPlayerService : Service() {
     private lateinit var player: MediaPlayer
     private val binder = AudioPlayerBinder()
-    private var isPlaying = true
 
     override fun onBind(intent: Intent): IBinder {
         return binder
@@ -38,9 +37,6 @@ class AudioPlayerService : Service() {
                 val title = intent.getStringExtra(TRACK_TITLE)
                     ?: throw IllegalArgumentException("No title was passed to service")
                 displayForegroundNotification(title)
-            }
-            ACTION_STOP_FOREGROUND_SERVICE -> {
-                player.release()
             }
             ACTION_PLAY -> play()
             ACTION_PAUSE -> pause()
@@ -70,7 +66,7 @@ class AudioPlayerService : Service() {
                 this, 0, Intent(
                     this,
                     MainActivity::class.java
-                ), 0
+                ), PendingIntent.FLAG_UPDATE_CURRENT
             )
         // play button intent
         val playIntent = Intent(this, this::class.java).apply {
@@ -88,6 +84,7 @@ class AudioPlayerService : Service() {
         val pendingPauseIntent =
             PendingIntent.getService(this,0,pauseIntent,0)
         val pauseAction = NotificationCompat.Action(android.R.drawable.ic_media_pause, "pause", pendingPauseIntent)
+
         val notification = NotificationCompat.Builder(this, channelId)
             .setContentTitle(title)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -98,7 +95,7 @@ class AudioPlayerService : Service() {
             .setWhen(0)
             .build()
         startForeground(1001, notification)
-        //todo button, img
+        //todo img
 
     }
 
@@ -140,6 +137,10 @@ class AudioPlayerService : Service() {
             }
             prepare()
             start()
+            setOnCompletionListener {
+                stopForeground(true)
+                stopSelf()
+            }
         }
     }
 
@@ -155,7 +156,6 @@ class AudioPlayerService : Service() {
 
     companion object {
         const val ACTION_START_SERVICE = "ACTION_START_FOREGROUND_SERVICE"
-        const val ACTION_STOP_FOREGROUND_SERVICE = "ACTION_STOP_FOREGROUND_SERVICE "
         const val ACTION_PAUSE = "ACTION_PAUSE"
         const val ACTION_PLAY = "ACTION_PLAY"
     }
