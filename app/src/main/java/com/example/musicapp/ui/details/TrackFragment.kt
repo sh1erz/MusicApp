@@ -58,11 +58,10 @@ class TrackFragment : Fragment() {
                 tvTrackTitle.text = track.title
                 tvTrackArtist.text = track.artist.name
                 bPlay.setOnClickListener(buttonListener)
-                initService(track.musicUri, track.title)
+                if (savedInstanceState == null) initService(track.musicUri, track.title)
             }
 
         }
-
     }
 
     private val buttonListener = object : View.OnClickListener {
@@ -111,14 +110,17 @@ class TrackFragment : Fragment() {
         Log.i(LOG, "trackFragment onCreate")
     }
 
-    //todo handle onConfigChange or check if it is same track -> continue else reset player
-    // + on activity destroyed -> destroy service
+    override fun onResume() {
+        super.onResume()
+        Log.i(LOG, "track fragm onResume")
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         Log.i(LOG, "trackFragment onDestroy")
 
-        activity?.unbindService(connection)
-        activity?.stopService(Intent(activity, AudioPlayerService::class.java))
+        /*activity?.unbindService(connection)
+        activity?.stopService(Intent(activity, AudioPlayerService::class.java))*/
 
     }
 
