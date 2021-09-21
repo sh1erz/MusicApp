@@ -1,13 +1,20 @@
 package com.example.musicapp.ui.details
 
-import android.app.Service
+import android.app.*
+import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import android.util.Log
-import com.example.musicapp.ui.details.TrackFragment.Companion.MUSIC_URI
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import com.example.musicapp.MainActivity
+import com.example.musicapp.R
+import com.example.musicapp.ui.details.TrackFragment.Companion.TRACK_TITLE
+import com.example.musicapp.ui.details.TrackFragment.Companion.TRACK_URI
 import com.example.musicapp.ui.main.model.LOG
 import java.io.IOException
 
@@ -15,18 +22,86 @@ import java.io.IOException
 class AudioPlayerService : Service() {
     private lateinit var player: MediaPlayer
     private val binder = AudioPlayerBinder()
+    private var isPlaying = true
 
     override fun onBind(intent: Intent): IBinder {
         return binder
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        initMediaPlayer(
-            intent?.getStringExtra(MUSIC_URI)
-                ?: throw IllegalArgumentException("No uri was passed to service")
-        )
+        if (intent == null) return super.onStartCommand(intent, flags, startId)
+        when (intent.action) {
+            ACTION_START_SERVICE -> {
+                val uri = intent.getStringExtra(TRACK_URI)
+                    ?: throw IllegalArgumentException("No uri was passed to service")
+                initMediaPlayer(uri)
+                val title = intent.getStringExtra(TRACK_TITLE)
+                    ?: throw IllegalArgumentException("No title was passed to service")
+                displayForegroundNotification(title)
+            }
+            ACTION_STOP_FOREGROUND_SERVICE -> {
+                player.release()
+            }
+            ACTION_PLAY -> play()
+            ACTION_PAUSE -> pause()
+        }
         return super.onStartCommand(intent, flags, startId)
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel(): String {
+        val channelId = "audio_service"
+        val channelName = "Music service"
+        NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).also {
+            it.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(it)
+        }
+        return channelId
+    }
+
+    private fun displayForegroundNotification(title: String) {
+        val channelId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel()
+        } else ""
+        val pendingIntent =
+            PendingIntent.getActivity(
+                this, 0, Intent(
+                    this,
+                    MainActivity::class.java
+                ), 0
+            )
+        // play button intent
+        val playIntent = Intent(this, this::class.java).apply {
+            action = ACTION_PLAY
+        }
+        val pendingPlayIntent =
+            PendingIntent.getService(this,0,playIntent,0)
+        val playAction = NotificationCompat
+            .Action(android.R.drawable.ic_media_play, "play", pendingPlayIntent)
+
+        //pause button intent
+        val pauseIntent = Intent(this, this::class.java).apply {
+            action = ACTION_PAUSE
+        }
+        val pendingPauseIntent =
+            PendingIntent.getService(this,0,pauseIntent,0)
+        val pauseAction = NotificationCompat.Action(android.R.drawable.ic_media_pause, "pause", pendingPauseIntent)
+        val notification = NotificationCompat.Builder(this, channelId)
+            .setContentTitle(title)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .addAction(pauseAction)
+            .addAction(playAction)
+            .setWhen(0)
+            .build()
+        startForeground(1001, notification)
+        //todo button, img
+
+    }
+
 
     fun play() {
         Log.i(LOG, "play")
@@ -37,7 +112,7 @@ class AudioPlayerService : Service() {
         }
     }
 
-    fun stop() {
+    fun pause() {
         try {
             player.pause()
         } catch (ex: UninitializedPropertyAccessException) {
@@ -56,6 +131,7 @@ class AudioPlayerService : Service() {
                     .build()
             )
             try {
+                //todo  network issues
                 setDataSource(url)
             } catch (ex: IllegalArgumentException) {
                 Log.i(LOG, "initMediaPlayer: ${ex.message}")
@@ -67,17 +143,20 @@ class AudioPlayerService : Service() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        player.release()
+        Log.i(LOG, "onDestroy: service destroyed")
+    }
+
     inner class AudioPlayerBinder : Binder() {
         fun getService() = this@AudioPlayerService
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        Log.i(LOG, "onCreate: service created")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.i(LOG, "onDestroy: service destroyed")
+    companion object {
+        const val ACTION_START_SERVICE = "ACTION_START_FOREGROUND_SERVICE"
+        const val ACTION_STOP_FOREGROUND_SERVICE = "ACTION_STOP_FOREGROUND_SERVICE "
+        const val ACTION_PAUSE = "ACTION_PAUSE"
+        const val ACTION_PLAY = "ACTION_PLAY"
     }
 }

@@ -1,12 +1,14 @@
 package com.example.musicapp.ui.details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.musicapp.data.entities.Artist
 import com.example.musicapp.databinding.FragmentArtistBinding
+import com.example.musicapp.ui.main.model.LOG
 import com.squareup.picasso.Picasso
 
 
@@ -14,6 +16,11 @@ class ArtistFragment : Fragment() {
 
     private var _binding: FragmentArtistBinding? = null
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.i(LOG, "Artist fragment onCreate")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

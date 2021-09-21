@@ -40,21 +40,6 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        navView.selectedItemId = R.id.mainFragment
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt(SELECTED_FRAGMENT_ID, binding.navView.selectedItemId)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        binding.navView.selectedItemId = savedInstanceState.getInt(SELECTED_FRAGMENT_ID, R.id.mainFragment)
-    }
-
-    companion object{
-        const val SELECTED_FRAGMENT_ID = "selected_fragment_id"
     }
 
     override fun onDestroy() {
