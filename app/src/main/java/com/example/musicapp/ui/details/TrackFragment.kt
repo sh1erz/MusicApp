@@ -58,7 +58,7 @@ class TrackFragment : Fragment() {
                 tvTrackTitle.text = track.title
                 tvTrackArtist.text = track.artist.name
                 bPlay.setOnClickListener(buttonListener)
-                initService(track.musicUri)
+                initService(track.musicUri, track.title)
             }
 
         }
@@ -70,7 +70,7 @@ class TrackFragment : Fragment() {
         override fun onClick(v: View?) {
             if (isPlaying) {
                 isPlaying = false
-                audioService.stop()
+                audioService.pause()
                 (v as ImageButton).setImageResource(R.drawable.ic_baseline_play_arrow_24)
             } else {
                 isPlaying = true
@@ -88,12 +88,15 @@ class TrackFragment : Fragment() {
 
     companion object {
         const val TRACK = "track"
-        const val MUSIC_URI = "music_uri"
+        const val TRACK_URI = "music_uri"
+        const val TRACK_TITLE = "music_title"
     }
 
-    private fun initService(uri: String) {
+    private fun initService(uri: String, title: String) {
         Intent(activity, AudioPlayerService::class.java).also {
-            it.putExtra(MUSIC_URI, uri)
+            it.putExtra(TRACK_URI, uri)
+            it.putExtra(TRACK_TITLE, title)
+            it.action = AudioPlayerService.ACTION_START_SERVICE
             activity?.bindService(
                 it,
                 connection,
@@ -108,11 +111,14 @@ class TrackFragment : Fragment() {
         Log.i(LOG, "trackFragment onCreate")
     }
 
+    //todo handle onConfigChange or check if it is same track -> continue else reset player
+    // + on activity destroyed -> destroy service
     override fun onDestroy() {
         super.onDestroy()
         Log.i(LOG, "trackFragment onDestroy")
 
         activity?.unbindService(connection)
+        activity?.stopService(Intent(activity, AudioPlayerService::class.java))
 
     }
 
