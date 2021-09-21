@@ -1,8 +1,10 @@
 package com.example.musicapp.data.entities
 
 import android.os.Parcelable
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Entity
@@ -17,7 +19,8 @@ data class Track(
     val duration: Int,
     val track_position: String?,
     val disk_number: Int?,
-    val preview: String, //mp3
+    @SerializedName("preview")
+    @ColumnInfo(name = "preview") val musicUri: String, //mp3
     val contributors: List<Artist>?,
     val artist: Artist,
     val album: Album,
