@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.musicapp.R
 import com.example.musicapp.databinding.MainFragmentBinding
@@ -23,7 +23,7 @@ class MainFragment : Fragment(), TrackView {
 
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
-    private val presenter: MainPresenter by viewModels()
+    private val presenter: MainPresenter by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

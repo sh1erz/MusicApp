@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.musicapp.data.entities.Track
 import com.example.musicapp.databinding.TrackItemBinding
 import com.example.musicapp.ui.adapters.OnTrackClickListener
-import com.example.musicapp.ui.main.presenter.MainPresenter
+import com.example.musicapp.ui.main.presenter.TrackAdapterDataSource
 import com.squareup.picasso.Picasso
 
 class TrackAdapter(
-    private val presenter: MainPresenter
+    private val presenter: TrackAdapterDataSource
 ) :
     RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
