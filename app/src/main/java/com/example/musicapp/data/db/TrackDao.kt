@@ -6,26 +6,26 @@ import com.example.musicapp.data.entities.Track
 
 @Dao
 interface TrackDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTracks(tracks: List<Track>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTrack(track: Track)
+    fun insertTrack(track: Track): Long
 
-    @Transaction
-    fun insertTrackUpIfExists(track: Track) {
-        deleteTrack(track.id)
-        insertTrack(track)
+    fun insertWithTimestamp(data: Track) {
+        insertTrack(data.apply {
+            listened = System.currentTimeMillis()
+        })
     }
 
-    @Query("SELECT * FROM track ORDER BY db_id DESC")
+    @Query("SELECT * FROM track ORDER BY listened DESC")
     fun getAllTracks(): LiveData<List<Track>>
 
     @Query("SELECT * FROM track WHERE id=:id")
-    fun getTrackById(id: Long) : Track
+    fun getTrackById(id: Long): Track
 
-    @Query("DELETE FROM track WHERE id=:id")
-    fun deleteTrack(id: Long)
+    @Delete
+    fun deleteTrack(track: Track): Int
 
     @Query("DELETE FROM track")
     fun clear()

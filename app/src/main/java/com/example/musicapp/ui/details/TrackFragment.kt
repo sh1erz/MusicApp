@@ -13,17 +13,25 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import com.example.musicapp.R
+import com.example.musicapp.data.MusicRepository
 import com.example.musicapp.data.entities.Track
 import com.example.musicapp.databinding.FragmentTrackBinding
 import com.example.musicapp.ui.main.model.LOG
 import com.squareup.picasso.Picasso
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class TrackFragment : Fragment() {
 
     private var _binding: FragmentTrackBinding? = null
     private val binding get() = _binding!!
     private var audioService: AudioPlayerService? = null
+    @Inject
+    lateinit var repo: MusicRepository
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -51,6 +59,7 @@ class TrackFragment : Fragment() {
 
         //passed from recycler with history or search
         arguments?.getParcelable<Track>(TRACK)?.let { track ->
+            CoroutineScope(Dispatchers.IO).launch { repo.addTrackUpIfExists(track) }
             binding.apply {
                 Picasso.with(context)
                     .load(track.album.cover_xl)
