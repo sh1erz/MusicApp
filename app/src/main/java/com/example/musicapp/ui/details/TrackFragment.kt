@@ -13,17 +13,25 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import com.example.musicapp.R
+import com.example.musicapp.data.MusicRepository
 import com.example.musicapp.data.entities.Track
 import com.example.musicapp.databinding.FragmentTrackBinding
 import com.example.musicapp.ui.main.model.LOG
 import com.squareup.picasso.Picasso
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class TrackFragment : Fragment() {
 
     private var _binding: FragmentTrackBinding? = null
     private val binding get() = _binding!!
-    private lateinit var audioService: AudioPlayerService
+    private var audioService: AudioPlayerService? = null
+    @Inject
+    lateinit var repo: MusicRepository
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -51,6 +59,7 @@ class TrackFragment : Fragment() {
 
         //passed from recycler with history or search
         arguments?.getParcelable<Track>(TRACK)?.let { track ->
+            CoroutineScope(Dispatchers.IO).launch { repo.addTrackUpIfExists(track) }
             binding.apply {
                 Picasso.with(context)
                     .load(track.album.cover_xl)
@@ -58,7 +67,20 @@ class TrackFragment : Fragment() {
                 tvTrackTitle.text = track.title
                 tvTrackArtist.text = track.artist.name
                 bPlay.setOnClickListener(buttonListener)
-                if (savedInstanceState == null) initService(track.musicUri, track.title)
+
+                val intent = Intent(activity, AudioPlayerService::class.java).also {
+                    it.putExtra(TRACK_URI, track.musicUri)
+                    it.putExtra(TRACK_TITLE, track.title)
+                    it.action = AudioPlayerService.ACTION_START_SERVICE
+                }
+                if (savedInstanceState == null) {
+                    activity?.startService(intent)
+                }
+                activity?.bindService(
+                    intent,
+                    connection,
+                    Context.BIND_AUTO_CREATE
+                )
             }
 
         }
@@ -69,11 +91,11 @@ class TrackFragment : Fragment() {
         override fun onClick(v: View?) {
             if (isPlaying) {
                 isPlaying = false
-                audioService.pause()
+                audioService?.pause()
                 (v as ImageButton).setImageResource(R.drawable.ic_baseline_play_arrow_24)
             } else {
                 isPlaying = true
-                audioService.play()
+                audioService?.play()
                 (v as ImageButton).setImageResource(R.drawable.ic_baseline_pause_24)
             }
         }
@@ -91,20 +113,6 @@ class TrackFragment : Fragment() {
         const val TRACK_TITLE = "music_title"
     }
 
-    private fun initService(uri: String, title: String) {
-        Intent(activity, AudioPlayerService::class.java).also {
-            it.putExtra(TRACK_URI, uri)
-            it.putExtra(TRACK_TITLE, title)
-            it.action = AudioPlayerService.ACTION_START_SERVICE
-            activity?.bindService(
-                it,
-                connection,
-                Context.BIND_AUTO_CREATE
-            )
-            activity?.startService(it)
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(LOG, "trackFragment onCreate")
@@ -118,9 +126,8 @@ class TrackFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         Log.i(LOG, "trackFragment onDestroy")
-
-        /*activity?.unbindService(connection)
-        activity?.stopService(Intent(activity, AudioPlayerService::class.java))*/
+        audioService = null
+        activity?.unbindService(connection)
 
     }
 

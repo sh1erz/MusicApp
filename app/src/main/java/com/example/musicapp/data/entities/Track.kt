@@ -10,9 +10,9 @@ import kotlinx.parcelize.Parcelize
 @Entity
 @Parcelize
 data class Track(
-    @PrimaryKey(autoGenerate = true)
-    val db_id : Long,
+    @PrimaryKey
     val id: Long,
+    var listened: Long = System.currentTimeMillis(),
     val title: String,
     val link: String,
     val share: String?,

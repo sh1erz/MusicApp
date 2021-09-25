@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData
 import com.example.musicapp.data.db.TrackDao
 import com.example.musicapp.data.entities.Track
 import com.example.musicapp.retrofit.DeezerService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -22,7 +20,7 @@ class MusicRepository @Inject constructor(
     fun getTrackById(id:Long): Track = trackDao.getTrackById(id)
 
     fun addTrackUpIfExists(track: Track) =
-        trackDao.insertTrackUpIfExists(track)
+        trackDao.insertWithTimestamp(track)
 
 
     suspend fun searchTracks(title: String, limit: Int = 25, index: Int = 0) =
