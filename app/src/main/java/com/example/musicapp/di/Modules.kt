@@ -57,12 +57,6 @@ class RoomModule {
     fun provideTrackDao(db: TrackDatabase): TrackDao = db.getTrackDao()
 }
 
-/*@Module
-@InstallIn(FragmentComponent::class)
-abstract class PresenterModule {
-    @Binds
-    abstract fun bindPresenter(presenter: MainPresenter): IPresenter
-}*/
 
 
 
