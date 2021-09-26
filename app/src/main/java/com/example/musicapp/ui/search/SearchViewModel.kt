@@ -4,10 +4,10 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.musicapp.LOG
 import com.example.musicapp.data.MusicRepository
 import com.example.musicapp.data.entities.Searchable
 import com.example.musicapp.data.entities.Track
-import com.example.musicapp.ui.main.model.LOG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject

@@ -10,10 +10,10 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.musicapp.LOG
 import com.example.musicapp.R
 import com.example.musicapp.databinding.MainFragmentBinding
 import com.example.musicapp.ui.details.TrackFragment
-import com.example.musicapp.ui.main.model.LOG
 import com.example.musicapp.ui.main.presenter.MainPresenter
 import dagger.hilt.android.AndroidEntryPoint
 

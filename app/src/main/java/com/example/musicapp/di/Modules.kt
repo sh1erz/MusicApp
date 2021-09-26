@@ -3,10 +3,10 @@ package com.example.musicapp.di
 import android.content.Context
 import android.util.Log
 import androidx.room.Room
+import com.example.musicapp.LOG
 import com.example.musicapp.data.db.TrackDao
 import com.example.musicapp.data.db.TrackDatabase
 import com.example.musicapp.retrofit.DeezerService
-import com.example.musicapp.ui.main.model.LOG
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

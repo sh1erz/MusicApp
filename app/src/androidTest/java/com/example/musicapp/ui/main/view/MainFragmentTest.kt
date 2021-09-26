@@ -6,8 +6,11 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import com.example.musicapp.R
 import com.example.musicapp.util.launchFragmentInHiltContainer
+import dagger.Module
+import dagger.hilt.InstallIn
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.components.SingletonComponent
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -20,6 +23,12 @@ class MainFragmentTest{
     @Before
     fun setUp() {
         hiltAndroidRule.inject()
+    }
+
+    @Module
+    @InstallIn(SingletonComponent::class)
+    object TestDbModule{
+
     }
 
     @Test

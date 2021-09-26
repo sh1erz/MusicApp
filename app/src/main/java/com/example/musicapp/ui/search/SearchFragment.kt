@@ -15,6 +15,7 @@ import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.musicapp.LOG
 import com.example.musicapp.R
 import com.example.musicapp.data.entities.Artist
 import com.example.musicapp.data.entities.Searchable
@@ -24,7 +25,6 @@ import com.example.musicapp.ui.adapters.OnArtistClickListener
 import com.example.musicapp.ui.adapters.OnTrackClickListener
 import com.example.musicapp.ui.details.ArtistFragment
 import com.example.musicapp.ui.details.TrackFragment
-import com.example.musicapp.ui.main.model.LOG
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observer
 import io.reactivex.disposables.CompositeDisposable

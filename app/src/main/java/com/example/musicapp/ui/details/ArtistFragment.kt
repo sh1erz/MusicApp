@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.musicapp.LOG
 import com.example.musicapp.data.entities.Artist
 import com.example.musicapp.databinding.FragmentArtistBinding
-import com.example.musicapp.ui.main.model.LOG
 import com.squareup.picasso.Picasso
 
 

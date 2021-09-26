@@ -12,11 +12,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
+import com.example.musicapp.LOG
 import com.example.musicapp.R
 import com.example.musicapp.data.MusicRepository
 import com.example.musicapp.data.entities.Track
 import com.example.musicapp.databinding.FragmentTrackBinding
-import com.example.musicapp.ui.main.model.LOG
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope

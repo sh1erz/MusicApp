@@ -11,11 +11,11 @@ import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.example.musicapp.LOG
 import com.example.musicapp.MainActivity
 import com.example.musicapp.R
 import com.example.musicapp.ui.details.TrackFragment.Companion.TRACK_TITLE
 import com.example.musicapp.ui.details.TrackFragment.Companion.TRACK_URI
-import com.example.musicapp.ui.main.model.LOG
 import java.io.IOException
 
 
