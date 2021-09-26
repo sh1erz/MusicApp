@@ -29,11 +29,14 @@ class TrackAdapter(
         RecyclerView.ViewHolder(binding.root),
         TrackRowView {
         override fun setView(listener: OnTrackClickListener, track: Track) {
-            Picasso.with(binding.picture.context)
-                .load(track.album.cover_medium)
-                .into(binding.picture)
-            binding.constraint.setOnClickListener { listener.onTrackItemClick(track) }
-
+            with(binding){
+                Picasso.with(picture.context)
+                    .load(track.album.cover_medium)
+                    .into(picture)
+                tvTitle.text = track.title
+                tvArtist.text = track.artist.name
+                constraint.setOnClickListener { listener.onTrackItemClick(track) }
+            }
         }
     }
 }
