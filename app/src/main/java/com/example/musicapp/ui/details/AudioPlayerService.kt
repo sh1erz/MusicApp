@@ -125,6 +125,12 @@ class AudioPlayerService : Service() {
 
 
     private fun initMediaPlayer(url: String) {
+        try {
+            player.release()
+        } catch (ex: UninitializedPropertyAccessException) {
+            Log.i(LOG, "player has not been initialized before")
+        }
+
         player = MediaPlayer().apply {
             setAudioAttributes(
                 AudioAttributes.Builder()
