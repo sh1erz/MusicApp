@@ -69,8 +69,8 @@ class TrackFragment : Fragment() {
                 bPlay.setOnClickListener(buttonListener)
 
                 val intent = Intent(activity, AudioPlayerService::class.java).also {
-                    it.putExtra(TRACK_URI, track.musicUri)
-                    it.putExtra(TRACK_TITLE, track.title)
+                    it.putExtra(TRACK, track)
+                    //it.putExtra(TRACK_TITLE, track.title)
                     it.action = AudioPlayerService.ACTION_START_SERVICE
                 }
                 if (savedInstanceState == null) {

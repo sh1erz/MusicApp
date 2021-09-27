@@ -14,7 +14,7 @@ data class Album(
     val cover_medium: String,
     val cover_big: String,
     val cover_xl: String,
-    val genre_id: String,
+    val genre_id: String?,
     val duration: Int?,
     val tracklist: String?,
     val tracks: List<Track>?

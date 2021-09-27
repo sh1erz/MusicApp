@@ -14,8 +14,12 @@ import androidx.core.app.NotificationCompat
 import com.example.musicapp.LOG
 import com.example.musicapp.MainActivity
 import com.example.musicapp.R
-import com.example.musicapp.ui.details.TrackFragment.Companion.TRACK_TITLE
-import com.example.musicapp.ui.details.TrackFragment.Companion.TRACK_URI
+import com.example.musicapp.data.entities.Track
+import com.example.musicapp.ui.details.TrackFragment.Companion.TRACK
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.IOException
 
 
@@ -31,12 +35,10 @@ class AudioPlayerService : Service() {
         if (intent == null) return super.onStartCommand(intent, flags, startId)
         when (intent.action) {
             ACTION_START_SERVICE -> {
-                val uri = intent.getStringExtra(TRACK_URI)
-                    ?: throw IllegalArgumentException("No uri was passed to service")
-                initMediaPlayer(uri)
-                val title = intent.getStringExtra(TRACK_TITLE)
-                    ?: throw IllegalArgumentException("No title was passed to service")
-                displayForegroundNotification(title)
+                val track = intent.getParcelableExtra<Track>(TRACK)
+                    ?: throw IllegalArgumentException("No track was passed to service")
+                initMediaPlayer(track.musicUri)
+                displayForegroundNotification(track)
             }
             ACTION_PLAY -> play()
             ACTION_PAUSE -> pause()
@@ -57,11 +59,13 @@ class AudioPlayerService : Service() {
         return channelId
     }
 
-    private fun displayForegroundNotification(title: String) {
+    private fun displayForegroundNotification(track: Track) {
         val channelId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
         } else ""
-        val returnIntent =Intent(
+
+        //go to app intent
+        val returnIntent = Intent(
             this,
             MainActivity::class.java
         ).apply {
@@ -71,14 +75,15 @@ class AudioPlayerService : Service() {
         }
         val pendingIntent =
             PendingIntent.getActivity(
-                this, 0, returnIntent , PendingIntent.FLAG_UPDATE_CURRENT
+                this, 0, returnIntent, PendingIntent.FLAG_UPDATE_CURRENT
             )
+
         // play button intent
         val playIntent = Intent(this, this::class.java).apply {
             action = ACTION_PLAY
         }
         val pendingPlayIntent =
-            PendingIntent.getService(this,0,playIntent,0)
+            PendingIntent.getService(this, 0, playIntent, 0)
         val playAction = NotificationCompat
             .Action(android.R.drawable.ic_media_play, "play", pendingPlayIntent)
 
@@ -87,19 +92,29 @@ class AudioPlayerService : Service() {
             action = ACTION_PAUSE
         }
         val pendingPauseIntent =
-            PendingIntent.getService(this,0,pauseIntent,0)
-        val pauseAction = NotificationCompat.Action(android.R.drawable.ic_media_pause, "pause", pendingPauseIntent)
+            PendingIntent.getService(this, 0, pauseIntent, 0)
+        val pauseAction = NotificationCompat.Action(
+            android.R.drawable.ic_media_pause,
+            "pause",
+            pendingPauseIntent
+        )
 
-        val notification = NotificationCompat.Builder(this, channelId)
-            .setContentTitle(title)
+        val notification = NotificationCompat.Builder(this@AudioPlayerService, channelId)
+            .setContentTitle(track.title)
+            .setContentText(track.artist.name)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .addAction(pauseAction)
             .addAction(playAction)
             .setWhen(0)
-            .build()
-        startForeground(1001, notification)
+
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val bmp = Picasso.with(this@AudioPlayerService).load(track.album.cover).get()
+            notification.setLargeIcon(bmp)
+            startForeground(1001, notification.build())
+        }
         //todo img
 
     }
