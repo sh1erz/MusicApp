@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.example.musicapp.LOG
 import com.example.musicapp.data.db.TrackDao
 import com.example.musicapp.data.db.TrackDatabase
+import com.example.musicapp.data.db.TrackDatabase.Companion.MIGRATION_1_2
 import com.example.musicapp.retrofit.DeezerService
 import dagger.Module
 import dagger.Provides
@@ -51,7 +52,8 @@ class RoomModule {
         applicationContext,
         TrackDatabase::class.java,
         "music.db"
-    ).build()
+    ).addMigrations(MIGRATION_1_2)
+        .build()
 
     @Provides
     fun provideTrackDao(db: TrackDatabase): TrackDao = db.getTrackDao()
