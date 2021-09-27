@@ -4,9 +4,9 @@ import android.content.Context
 import android.util.Log
 import androidx.room.Room
 import com.example.musicapp.LOG
+import com.example.musicapp.data.db.MIGRATION_1_2
 import com.example.musicapp.data.db.TrackDao
 import com.example.musicapp.data.db.TrackDatabase
-import com.example.musicapp.data.db.TrackDatabase.Companion.MIGRATION_1_2
 import com.example.musicapp.retrofit.DeezerService
 import dagger.Module
 import dagger.Provides
