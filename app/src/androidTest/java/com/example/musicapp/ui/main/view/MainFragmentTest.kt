@@ -8,22 +8,14 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.example.musicapp.R
-import com.example.musicapp.data.db.TrackDao
 import com.example.musicapp.data.entities.Track
 import com.example.musicapp.di.RetrofitModule
 import com.example.musicapp.di.RoomModule
-import com.example.musicapp.fakes.FakeDeezerService
-import com.example.musicapp.fakes.FakeTrackDao
 import com.example.musicapp.fakes.TRACKS_DATASET
-import com.example.musicapp.retrofit.DeezerService
 import com.example.musicapp.util.launchFragmentInHiltContainer
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.*
 import org.junit.Before
 import org.junit.Rule
@@ -42,21 +34,6 @@ class MainFragmentTest{
         launchFragmentInHiltContainer<MainFragment>()
     }
 
-    @Module
-    @InstallIn(SingletonComponent::class)
-    object TestRoomModule {
-        @Provides
-        fun provideTrackDao(): TrackDao = FakeTrackDao().apply {
-            insertTracks(TRACKS_DATASET)
-        }
-    }
-
-    @Module
-    @InstallIn(SingletonComponent::class)
-    object TestDataSourceModule {
-        @Provides
-        fun provideDeezerService(): DeezerService = FakeDeezerService()
-    }
 
     @Test
     fun test_backNavigation_toMainFragment() {
