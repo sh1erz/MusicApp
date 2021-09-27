@@ -9,8 +9,7 @@ import com.example.musicapp.data.entities.Track
 
 @Database(
     entities = [Track::class],
-    version = 2,
-    exportSchema = false
+    version = 2
 )
 @TypeConverters(Converters::class)
 abstract class TrackDatabase : RoomDatabase() {
