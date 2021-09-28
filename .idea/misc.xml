@@ -6,7 +6,8 @@
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/drawable-v24/ic_baseline_search_24.xml" value="0.1" />
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.26927083333333335" />
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
-        <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout-land/fragment_track.xml" value="0.21516754850088182" />
+        <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout-land/fragment_artist.xml" value="0.176" />
+        <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout-land/fragment_track.xml" value="0.1" />
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout/activity_main.xml" value="0.18947368421052632" />
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout/artist_item.xml" value="0.264" />
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout/fragment_artist.xml" value="0.1" />
@@ -20,6 +21,7 @@
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/layout/track_item.xml" value="0.11510416666666666" />
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/menu/menu_nav.xml" value="0.15052083333333333" />
         <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/menu/menu_search.xml" value="0.1" />
+        <entry key="..\:/Users/Karina/AndroidStudioProjects/MusicApp/app/src/main/res/xml/root_preferences.xml" value="0.264" />
       </map>
     </option>
   </component>

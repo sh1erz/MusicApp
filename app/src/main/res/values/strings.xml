@@ -20,4 +20,10 @@
     <string name="artist_image">artist image</string>
     <string name="track_cover">track cover</string>
     <string name="play">play</string>
+    <string name="theme" translatable="false">theme</string>
+
+    <string-array name="themes">
+        <item>Classic</item>
+        <item>Light</item>
+    </string-array>
 </resources>
