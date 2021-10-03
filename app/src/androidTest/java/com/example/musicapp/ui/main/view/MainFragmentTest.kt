@@ -34,58 +34,47 @@ class MainFragmentTest{
         launchFragmentInHiltContainer<MainFragment>()
     }
 
+    private val delay = 10000L
 
     @Test
     fun test_backNavigation_toMainFragment() {
         val position = 1
-        CoroutineScope(Dispatchers.Default).launch {
-            delay(1000)
-            withContext(Dispatchers.Main) {
-                onView(withId(R.id.recyclerTracks))
-                    .perform(
-                        actionOnItemAtPosition<TrackAdapter.TrackViewHolder>(
-                            position,
-                            click()
-                        )
+        execute {
+            onView(withId(R.id.recyclerTracks))
+                .perform(
+                    actionOnItemAtPosition<TrackAdapter.TrackViewHolder>(
+                        position,
+                        click()
                     )
-
-                pressBack()
-
-                onView(withId(R.id.recyclerTracks)).check(matches(isDisplayed()))
-            }
+                )
+            pressBack()
+            onView(withId(R.id.recyclerTracks)).check(matches(isDisplayed()))
         }
-
-
     }
 
     @Test
     fun test_recyclerItemDataIsCorrect() {
         val position = 0
-        CoroutineScope(Dispatchers.Default).launch {
-            delay(1000)
-            withContext(Dispatchers.Main) {
-                scrollAtAndCheckTrackVisible(position, TRACKS_DATASET[position])
-            }
+        execute {
+            scrollAtAndCheckTrackVisible(position, TRACKS_DATASET[position])
         }
     }
 
     @Test
     fun test_selectListItem_isTrackFragmentVisible() {
         val position = 0
-        CoroutineScope(Dispatchers.Default).launch {
-            delay(1000)
-            withContext(Dispatchers.Main) {
-                onView(withId(R.id.recyclerTracks))
-                    .perform(
-                        RecyclerViewActions
-                            .scrollToPosition<TrackAdapter.TrackViewHolder>(position),
-                        actionOnItemAtPosition<TrackAdapter.TrackViewHolder>(
-                            position,
-                            click()
-                        )
+        execute {
+            onView(withId(R.id.recyclerTracks))
+                .perform(
+                    RecyclerViewActions
+                        .scrollToPosition<TrackAdapter.TrackViewHolder>(position),
+                    actionOnItemAtPosition<TrackAdapter.TrackViewHolder>(
+                        position,
+                        click()
                     )
-            }
+                )
         }
+
     }
 
     private fun scrollAtAndCheckTrackVisible(position: Int, track: Track) {
@@ -102,7 +91,7 @@ class MainFragmentTest{
 
     private fun execute(f: () -> Unit) {
         CoroutineScope(Dispatchers.Default).launch {
-            delay(1000)
+            delay(delay)
             withContext(Dispatchers.Main) {
                 f()
             }
