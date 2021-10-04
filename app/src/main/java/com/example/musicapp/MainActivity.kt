@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         binding = ActivityMainBinding.inflate(layoutInflater)
         theme =
             PreferenceManager.getDefaultSharedPreferences(application).getString("theme", "Light")!!
+
         when(theme){
             "Light" -> setTheme(R.style.Theme_MusicApp)
             "Classic" -> setTheme(R.style.Theme_MusicApp_Classic)
