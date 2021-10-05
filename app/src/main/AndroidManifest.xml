@@ -13,10 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicApp">
         <service
+            android:name=".services.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
             android:name=".ui.details.AudioPlayerService"
             android:enabled="true"
-            android:exported="true"
-            android:stopWithTask="true"/>
+            android:exported="false"
+            android:stopWithTask="true" />
 
         <activity
             android:name=".MainActivity"
@@ -27,6 +34,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_launcher_foreground" />
     </application>
 
 </manifest>
