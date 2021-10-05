@@ -9,14 +9,10 @@ import com.example.musicapp.data.entities.Track
 
 @Database(
     entities = [Track::class],
-    version = 2
+    version = 1,
+    exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class TrackDatabase : RoomDatabase() {
     abstract fun getTrackDao(): TrackDao
-}
-val MIGRATION_1_2 = object : Migration(1, 2) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE track ADD COLUMN newColumn INTEGER DEFAULT 0")
-    }
 }

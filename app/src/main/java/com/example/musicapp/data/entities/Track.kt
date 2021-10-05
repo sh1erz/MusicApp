@@ -24,8 +24,7 @@ data class Track(
     val contributors: List<Artist>?,
     val artist: Artist,
     val album: Album,
-    val type: String?,
-    val newColumn : Int? = 0
+    val type: String?
 ) : Searchable, Parcelable
 
 
