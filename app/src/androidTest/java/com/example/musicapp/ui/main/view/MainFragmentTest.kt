@@ -7,12 +7,12 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
+import com.example.data.entities.Track
+import com.example.db.RoomModule
 import com.example.musicapp.R
-import com.example.musicapp.data.entities.Track
-import com.example.musicapp.di.RetrofitModule
-import com.example.musicapp.di.RoomModule
 import com.example.musicapp.fakes.TRACKS_DATASET
 import com.example.musicapp.util.launchFragmentInHiltContainer
+import com.example.retrofit.RetrofitModule
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
@@ -77,7 +77,10 @@ class MainFragmentTest{
 
     }
 
-    private fun scrollAtAndCheckTrackVisible(position: Int, track: Track) {
+    private fun scrollAtAndCheckTrackVisible(
+        position: Int,
+        track: Track
+    ) {
         onView(withId(R.id.recyclerTracks))
             .perform(
                 RecyclerViewActions

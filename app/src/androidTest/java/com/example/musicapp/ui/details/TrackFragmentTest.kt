@@ -9,22 +9,30 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
-import com.example.musicapp.di.RetrofitModule
-import com.example.musicapp.di.RoomModule
+import com.example.db.RoomModule
+import com.example.db.TrackDao
+import com.example.musicapp.fakes.FakeDeezerService
+import com.example.musicapp.fakes.FakeTrackDao
 import com.example.musicapp.fakes.TRACKS_DATASET
 import com.example.musicapp.ui.details.TrackFragment.Companion.TRACK
 import com.example.musicapp.util.launchFragmentInHiltContainer
+import com.example.retrofit.DeezerService
+import com.example.retrofit.RetrofitModule
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
+import dagger.hilt.components.SingletonComponent
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-@HiltAndroidTest
 @UninstallModules(RetrofitModule::class, RoomModule::class)
-class TrackFragmentTest{
+@HiltAndroidTest
+class TrackFragmentTest {
     private val position = 1
     private val track = TRACKS_DATASET[position]
     private val uiDevice by lazy { UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()) }
@@ -32,14 +40,32 @@ class TrackFragmentTest{
     @get:Rule
     var hiltAndroidRule = HiltAndroidRule(this)
 
+
+    @Module
+    @InstallIn(SingletonComponent::class)
+    object TestRoomModule {
+        @Provides
+        fun provideTrackDao(): TrackDao = FakeTrackDao().apply {
+            insertTracks(TRACKS_DATASET)
+        }
+    }
+
+    @Module
+    @InstallIn(SingletonComponent::class)
+    object TestDataSourceModule {
+        @Provides
+        fun provideDeezerService(): DeezerService = FakeDeezerService()
+    }
+
     @Before
     fun setUp() {
         hiltAndroidRule.inject()
         Intents.init()
         launchFragmentInHiltContainer<TrackFragment>(bundleOf(TRACK to track))
     }
+
     @After
-    fun after(){
+    fun after() {
         Intents.release()
     }
 

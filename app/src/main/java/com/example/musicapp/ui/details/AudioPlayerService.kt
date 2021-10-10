@@ -14,7 +14,7 @@ import androidx.core.app.NotificationCompat
 import com.example.musicapp.LOG
 import com.example.musicapp.MainActivity
 import com.example.musicapp.R
-import com.example.musicapp.data.entities.Track
+import com.example.data.entities.Track
 import com.example.musicapp.ui.details.TrackFragment.Companion.TRACK
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope

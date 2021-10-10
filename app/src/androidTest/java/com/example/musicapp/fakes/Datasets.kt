@@ -1,8 +1,8 @@
 package com.example.musicapp.fakes
 
-import com.example.musicapp.data.entities.Album
-import com.example.musicapp.data.entities.Artist
-import com.example.musicapp.data.entities.Track
+import com.example.data.entities.Album
+import com.example.data.entities.Artist
+import com.example.data.entities.Track
 
 val test_album = Album(
     0,
@@ -50,7 +50,8 @@ val TRACKS_DATASET = listOf(
         test_album,
         null
     ),
-    Track(20,
+    Track(
+        20,
         1,
         "Title 2",
         "https://www.deezer.com/track/3135556",
@@ -62,8 +63,10 @@ val TRACKS_DATASET = listOf(
         null,
         test_artist,
         test_album,
-        null),
-    Track(28,
+        null
+    ),
+    Track(
+        28,
         3,
         "Title 3",
         "https://www.deezer.com/track/3135556",
@@ -75,5 +78,6 @@ val TRACKS_DATASET = listOf(
         null,
         test_artist,
         test_album,
-        null)
+        null
+    )
 )
