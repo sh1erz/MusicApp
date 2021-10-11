@@ -1,7 +1,6 @@
 package com.example.musicapp.ui.main.presenter
 
-import com.example.musicapp.data.MusicRepository
-import com.example.musicapp.data.entities.Track
+import com.example.data_android.MusicRepository
 import com.example.musicapp.ui.adapters.OnTrackClickListener
 import com.example.musicapp.ui.main.view.TrackRowView
 import com.example.musicapp.ui.main.view.TrackView
@@ -13,7 +12,7 @@ class MainPresenter @Inject constructor(private val repository: MusicRepository)
     BasePresenter<TrackView>(),
     OnTrackClickListener, TrackAdapterDataSource {
 
-    private var tracks: List<Track> = listOf()
+    private var tracks: List<com.example.data.entities.Track> = listOf()
 
     fun loadTracks(){
         view()?.let { view ->
@@ -31,7 +30,7 @@ class MainPresenter @Inject constructor(private val repository: MusicRepository)
 
     override fun getItemsCount() = tracks.size
 
-    override fun onTrackItemClick(track: Track) {
+    override fun onTrackItemClick(track: com.example.data.entities.Track) {
         view()?.showDetails(track)
     }
 

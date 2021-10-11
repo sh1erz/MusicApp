@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.musicapp.LOG
-import com.example.musicapp.data.entities.Artist
+import com.example.data.entities.Artist
 import com.example.musicapp.databinding.FragmentArtistBinding
 import com.squareup.picasso.Picasso
 

@@ -3,9 +3,9 @@ package com.example.musicapp.ui.search
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.musicapp.data.entities.Artist
-import com.example.musicapp.data.entities.Searchable
-import com.example.musicapp.data.entities.Track
+import com.example.data.entities.Artist
+import com.example.data.entities.Searchable
+import com.example.data.entities.Track
 import com.example.musicapp.databinding.ArtistItemBinding
 import com.example.musicapp.databinding.TrackItemBinding
 import com.example.musicapp.ui.adapters.OnArtistClickListener

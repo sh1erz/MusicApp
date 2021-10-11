@@ -5,9 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.musicapp.LOG
-import com.example.musicapp.data.MusicRepository
-import com.example.musicapp.data.entities.Searchable
-import com.example.musicapp.data.entities.Track
+import com.example.data_android.MusicRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -20,21 +18,21 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(private val musicRepository: MusicRepository) :
     ViewModel() {
 
-    private val _searchedList = MutableLiveData<List<Searchable>>(listOf())
+    private val _searchedList = MutableLiveData<List<com.example.data.entities.Searchable>>(listOf())
     val searchedList
         get() = _searchedList
     val publishSubject: PublishSubject<String> = PublishSubject.create()
 
     fun getTrackById(id:Long) = musicRepository.getTrackById(id)
 
-    fun addTrack(track: Track) =
+    fun addTrack(track: com.example.data.entities.Track) =
         viewModelScope.launch(Dispatchers.IO) { musicRepository.addTrackUpIfExists(track) }
 
     fun search(query: String) = viewModelScope.launch(Dispatchers.IO) {
         try {
             val artists = musicRepository.searchArtists(query, limit = 3)
             val tracks = musicRepository.searchTracks(query)
-            val list = mutableListOf<Searchable>()
+            val list = mutableListOf<com.example.data.entities.Searchable>()
             list.apply {
                 addAll(artists.data)
                 addAll(tracks.data)
