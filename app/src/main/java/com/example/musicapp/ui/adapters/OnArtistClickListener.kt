@@ -1,7 +1,7 @@
 package com.example.musicapp.ui.adapters
 
-import com.example.musicapp.data.entities.Artist
+import com.example.data.entities.Artist
 
 interface OnArtistClickListener {
-    fun onArtistItemClick(artist: Artist)
+    fun onArtistItemClick(artist: com.example.data.entities.Artist)
 }

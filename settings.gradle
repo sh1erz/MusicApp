@@ -3,8 +3,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        jcenter() // Warning: this repository is going to shut down soon
     }
 }
 rootProject.name = "MusicApp"
 include ':app'
+include ':retrofit'
+include ':data'
+include ':db'
+include ':data-android'

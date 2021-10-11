@@ -17,9 +17,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.musicapp.LOG
 import com.example.musicapp.R
-import com.example.musicapp.data.entities.Artist
-import com.example.musicapp.data.entities.Searchable
-import com.example.musicapp.data.entities.Track
+import com.example.data.entities.Artist
+import com.example.data.entities.Searchable
+import com.example.data.entities.Track
 import com.example.musicapp.databinding.FragmentSearchBinding
 import com.example.musicapp.ui.adapters.OnArtistClickListener
 import com.example.musicapp.ui.adapters.OnTrackClickListener
@@ -38,7 +38,6 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
     private val binding get() = _binding!!
     private val viewModel: SearchViewModel by activityViewModels()
     private lateinit var cursorAdapter: SimpleCursorAdapter
-    //private val recyclerAdapter: SearchAdapter = SearchAdapter(mutableListOf(), this, this)
     private val disposables = CompositeDisposable()
         private val subscriber = object : Observer<List<String>> {
         override fun onNext(names: List<String>) {

@@ -14,8 +14,7 @@ import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import com.example.musicapp.LOG
 import com.example.musicapp.R
-import com.example.musicapp.data.MusicRepository
-import com.example.musicapp.data.entities.Track
+import com.example.data_android.MusicRepository
 import com.example.musicapp.databinding.FragmentTrackBinding
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,7 +57,7 @@ class TrackFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //passed from recycler with history or search
-        arguments?.getParcelable<Track>(TRACK)?.let { track ->
+        arguments?.getParcelable<com.example.data.entities.Track>(TRACK)?.let { track ->
             CoroutineScope(Dispatchers.IO).launch { repo.addTrackUpIfExists(track) }
             binding.apply {
                 Picasso.with(context)

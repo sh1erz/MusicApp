@@ -3,7 +3,7 @@ package com.example.musicapp.ui.main.view
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.musicapp.data.entities.Track
+import com.example.data.entities.Track
 import com.example.musicapp.databinding.TrackItemBinding
 import com.example.musicapp.ui.adapters.OnTrackClickListener
 import com.example.musicapp.ui.main.presenter.TrackAdapterDataSource
