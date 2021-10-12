@@ -1,4 +1,4 @@
-package com.example.musicapp.ui.details
+package com.example.musicapp.services
 
 import android.app.*
 import android.content.Context
@@ -15,6 +15,7 @@ import com.example.musicapp.LOG
 import com.example.musicapp.MainActivity
 import com.example.musicapp.R
 import com.example.data.entities.Track
+import com.example.musicapp.services.NotificationUtil.createNotificationChannel
 import com.example.musicapp.ui.details.TrackFragment.Companion.TRACK
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -46,22 +47,9 @@ class AudioPlayerService : Service() {
         return super.onStartCommand(intent, flags, startId)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(): String {
-        val channelId = "audio_service"
-        val channelName = "Music service"
-        NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).also {
-            it.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            val notificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(it)
-        }
-        return channelId
-    }
-
     private fun displayForegroundNotification(track: Track) {
         val channelId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNotificationChannel()
+            createNotificationChannel(this, "audio_service", "Audio Player")
         } else ""
 
         //go to app intent
@@ -85,7 +73,7 @@ class AudioPlayerService : Service() {
         val pendingPlayIntent =
             PendingIntent.getService(this, 0, playIntent, 0)
         val playAction = NotificationCompat
-            .Action(android.R.drawable.ic_media_play, "play", pendingPlayIntent)
+            .Action(android.R.drawable.ic_media_play, "Play", pendingPlayIntent)
 
         //pause button intent
         val pauseIntent = Intent(this, this::class.java).apply {
@@ -95,7 +83,7 @@ class AudioPlayerService : Service() {
             PendingIntent.getService(this, 0, pauseIntent, 0)
         val pauseAction = NotificationCompat.Action(
             android.R.drawable.ic_media_pause,
-            "pause",
+            "Pause",
             pendingPauseIntent
         )
 
@@ -115,8 +103,6 @@ class AudioPlayerService : Service() {
             notification.setLargeIcon(bmp)
             startForeground(1001, notification.build())
         }
-        //todo img
-
     }
 
 

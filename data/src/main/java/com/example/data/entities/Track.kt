@@ -14,7 +14,7 @@ data class Track(
     val id: Long,
     var listened: Long = System.currentTimeMillis(),
     val title: String,
-    val link: String,
+    val link: String?,
     val share: String?,
     val duration: Int,
     val track_position: String?,
@@ -23,7 +23,7 @@ data class Track(
     @ColumnInfo(name = "preview") val musicUri: String, //mp3
     val contributors: List<Artist>?,
     val artist: Artist,
-    val album: Album,
+    var album: Album,
     val type: String?
 ) : Searchable, Parcelable
 

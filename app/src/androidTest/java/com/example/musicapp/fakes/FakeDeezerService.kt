@@ -30,4 +30,7 @@ class FakeDeezerService : DeezerService {
         limit: Int
     ): Suggestion<SuggestTrack> =
         Suggestion(listOf())
+
+    override suspend fun getReleaseAlbums(genreId: Int): Editorial<Album> = Editorial(listOf(test_album))
+    override suspend fun findAlbumTracks(id: Long): Editorial<Track> = Editorial(TRACKS_DATASET)
 }

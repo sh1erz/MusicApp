@@ -21,9 +21,22 @@
     <string name="track_cover">track cover</string>
     <string name="play">play</string>
     <string name="theme" translatable="false">theme</string>
+    <string name="release">Check out new release of</string>
 
     <string-array name="themes">
         <item>Classic</item>
         <item>Light</item>
+    </string-array>
+    <string-array name="genres">
+        <item>Rock</item>
+        <item>Pop</item>
+        <item>Electronic</item>
+        <item>Rap</item>
+    </string-array>
+    <string-array name="genres_val">
+        <item>152</item>
+        <item>132</item>
+        <item>106</item>
+        <item>116</item>
     </string-array>
 </resources>

@@ -29,7 +29,7 @@
     <fragment
         android:id="@+id/artistFragment"
         android:name="com.example.musicapp.ui.details.ArtistFragment"
-        android:label="fragment_details"
+        android:label="Artist"
         tools:layout="@layout/fragment_artist">
         <argument
             android:name="ShowNavBar"
@@ -38,7 +38,7 @@
     <fragment
         android:id="@+id/trackFragment"
         android:name="com.example.musicapp.ui.details.TrackFragment"
-        android:label="fragment_track"
+        android:label="Track"
         tools:layout="@layout/fragment_track">
         <argument
             android:name="ShowNavBar"

@@ -22,4 +22,4 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 }
 
-const val TAG = "firebase"
+const val TAG = "firebase_log"

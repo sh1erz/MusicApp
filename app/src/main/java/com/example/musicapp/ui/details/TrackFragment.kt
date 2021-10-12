@@ -12,10 +12,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
+import com.example.data.entities.Track
 import com.example.musicapp.LOG
 import com.example.musicapp.R
 import com.example.data_android.MusicRepository
 import com.example.musicapp.databinding.FragmentTrackBinding
+import com.example.musicapp.services.AudioPlayerService
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -57,7 +59,7 @@ class TrackFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //passed from recycler with history or search
-        arguments?.getParcelable<com.example.data.entities.Track>(TRACK)?.let { track ->
+        arguments?.getParcelable<Track>(TRACK)?.let { track ->
             CoroutineScope(Dispatchers.IO).launch { repo.addTrackUpIfExists(track) }
             binding.apply {
                 Picasso.with(context)
@@ -107,8 +109,6 @@ class TrackFragment : Fragment() {
 
     companion object {
         const val TRACK = "track"
-        const val TRACK_URI = "music_uri"
-        const val TRACK_TITLE = "music_title"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -5,12 +5,12 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Album(
-    val id: Int,
+    val id: Long,
     val title: String,
     val link: String?,
     val share: String?,
-    val cover: String,
-    val cover_small: String,
+    var cover: String,
+    var cover_small: String,
     val cover_medium: String,
     val cover_big: String,
     val cover_xl: String,

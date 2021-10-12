@@ -11,12 +11,16 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
+import androidx.work.*
 import com.example.musicapp.databinding.ActivityMainBinding
 import com.example.musicapp.services.TAG
+import com.example.musicapp.workmanager.FindReleaseWorker
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.TimeUnit
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -35,7 +39,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             else -> setTheme(R.style.Theme_MusicApp)
         }
         setContentView(binding.root)
-        Log.i(LOG, "onCreate: activity")
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.navHostFragment).apply {
             addOnDestinationChangedListener { _, _, args ->
@@ -53,6 +56,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        initWorker()
     }
 
     private fun getToken(){
@@ -61,12 +65,21 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 Log.i(TAG, "Fetching FCM registration token failed", task.exception)
                 return@OnCompleteListener
             }
-
-            // Get new FCM registration token
             val token = task.result
-            // Log and toast
             Log.i(TAG, "getToken: $token")
         })
+    }
+
+    private fun initWorker() {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.UNMETERED)
+            .build()
+        val request = PeriodicWorkRequestBuilder<FindReleaseWorker>(1, TimeUnit.DAYS)
+            .setConstraints(constraints)
+            .build()
+        WorkManager.getInstance(applicationContext).enqueue(request)
+        WorkManager.getInstance(applicationContext).getWorkInfoByIdLiveData(request.id)
+            .observe(this, { info -> Log.i(LOG, "Worker: ${info.state}") })
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
