@@ -14,6 +14,7 @@ import androidx.cursoradapter.widget.CursorAdapter
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.example.data.entities.Artist
@@ -21,7 +22,9 @@ import com.example.data.entities.Searchable
 import com.example.data.entities.Track
 import com.example.musicapp.LOG
 import com.example.musicapp.R
+import com.example.musicapp.databinding.ArtistItemBinding
 import com.example.musicapp.databinding.FragmentSearchBinding
+import com.example.musicapp.databinding.TrackItemBinding
 import com.example.musicapp.ui.adapters.OnArtistClickListener
 import com.example.musicapp.ui.adapters.OnTrackClickListener
 import com.example.musicapp.ui.details.ArtistFragment
@@ -63,23 +66,33 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
         }
     }
 
-    override fun onArtistItemClick(artist: Artist) {
+    override fun onArtistItemClick(artist: Artist, binding: ArtistItemBinding) {
         val bundle = bundleOf(ArtistFragment.ARTIST to artist)
-        if (isTablet)
+        if (isTablet) {
             navHostFragment.navController.navigate(R.id.artistFragment, bundle)
-        else
-            findNavController().navigate(
-                R.id.action_search_to_artistDetails,
-                bundle
-            )
+            return
+        }
+        val extras = FragmentNavigatorExtras(
+            binding.imgArtist to artist.picture_xl!!
+        )
+        findNavController().navigate(
+            R.id.action_search_to_artistDetails,
+            bundle,
+            null,
+            extras
+        )
     }
 
-    override fun onTrackItemClick(track: Track) {
+    override fun onTrackItemClick(track: Track, binding: TrackItemBinding) {
         val bundle = bundleOf(TrackFragment.TRACK to track)
-        if (isTablet)
+        if (isTablet) {
             navHostFragment.navController.navigate(R.id.trackFragment, bundle)
-        else
-            findNavController().navigate(R.id.action_search_to_trackDetails, bundle)
+            return
+        }
+        val extras = FragmentNavigatorExtras(
+            binding.picture to track.album.cover
+        )
+        findNavController().navigate(R.id.action_search_to_trackDetails, bundle, null, extras)
     }
 
 

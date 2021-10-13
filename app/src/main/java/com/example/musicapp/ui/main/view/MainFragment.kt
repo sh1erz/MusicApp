@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import com.example.musicapp.LOG
 import com.example.musicapp.R
@@ -45,9 +46,14 @@ class MainFragment : Fragment(), TrackView {
         binding.recyclerTracks.adapter = TrackAdapter(presenter)
     }
 
-    override fun showDetails(parcelable: Parcelable) {
+    override fun showDetails(parcelable: Parcelable, extras: FragmentNavigator.Extras?) {
         findNavController()
-            .navigate(R.id.action_main_to_trackDetails, bundleOf(TrackFragment.TRACK to parcelable))
+            .navigate(
+                R.id.action_main_to_trackDetails,
+                bundleOf(TrackFragment.TRACK to parcelable),
+                null,
+                extras
+            )
     }
 
     override fun onDestroyView() {

@@ -30,12 +30,13 @@ class TrackAdapter(
         TrackRowView {
         override fun setView(listener: OnTrackClickListener, track: Track) {
             with(binding){
+                picture.transitionName = track.album.cover
                 Picasso.with(picture.context)
                     .load(track.album.cover_medium)
                     .into(picture)
                 tvTitle.text = track.title
                 tvArtist.text = track.artist.name
-                constraint.setOnClickListener { listener.onTrackItemClick(track) }
+                constraint.setOnClickListener { listener.onTrackItemClick(track, this) }
             }
         }
     }

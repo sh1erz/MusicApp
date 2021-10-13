@@ -42,25 +42,27 @@ class SearchAdapter(
             ARTIST_TYPE -> {
                 val artist = items[position] as Artist
                 holder.artistBinding?.apply {
+                    imgArtist.transitionName = artist.picture_xl
                     tvName.text = artist.name
                     Picasso.with(imgArtist.context)
                         .load(artist.picture_medium)
                         .into(imgArtist)
                     constraint.setOnClickListener {
-                        artistListener.onArtistItemClick(artist)
+                        artistListener.onArtistItemClick(artist, this)
                     }
                 }
             }
             TRACK_TYPE -> {
                 val track = items[position] as Track
                 holder.trackBinding?.apply {
+                    picture.transitionName = track.album.cover
                     tvTitle.text = track.title
                     tvArtist.text = track.artist.name
                     Picasso.with(picture.context)
                         .load(track.album.cover_medium)
                         .into(picture)
                     constraint.setOnClickListener {
-                        trackListener.onTrackItemClick(track)
+                        trackListener.onTrackItemClick(track, this)
                     }
                 }
             }

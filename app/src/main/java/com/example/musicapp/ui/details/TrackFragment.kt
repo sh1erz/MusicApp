@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
+import androidx.transition.TransitionInflater
 import com.example.data.entities.Track
 import com.example.musicapp.LOG
 import com.example.musicapp.R
@@ -46,6 +47,12 @@ class TrackFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition =
+            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,6 +69,7 @@ class TrackFragment : Fragment() {
         arguments?.getParcelable<Track>(TRACK)?.let { track ->
             CoroutineScope(Dispatchers.IO).launch { repo.addTrackUpIfExists(track) }
             binding.apply {
+                imgTrack.transitionName = track.album.cover
                 Picasso.with(context)
                     .load(track.album.cover_xl)
                     .into(imgTrack)
@@ -109,11 +117,6 @@ class TrackFragment : Fragment() {
 
     companion object {
         const val TRACK = "track"
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.i(LOG, "trackFragment onCreate")
     }
 
     override fun onResume() {

@@ -1,7 +1,8 @@
 package com.example.musicapp.ui.adapters
 
 import com.example.data.entities.Track
+import com.example.musicapp.databinding.TrackItemBinding
 
 interface OnTrackClickListener {
-    fun onTrackItemClick(track: com.example.data.entities.Track)
+    fun onTrackItemClick(track: Track, binding: TrackItemBinding)
 }
