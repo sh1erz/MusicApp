@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:toolsNs="http://schemas.android.com/tools"
-    android:background="@color/white">
+    android:background="@color/black">
 
     <TextView
         android:id="@+id/tvItem"
+        android:textColor="@color/primaryTextColor"
         android:layout_width="match_parent"
-        android:textColor="@color/secondaryTextColor"
         android:layout_height="wrap_content"
         toolsNs:text="test text"
         android:textSize="18sp" />
