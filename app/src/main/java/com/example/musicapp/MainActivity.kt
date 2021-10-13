@@ -74,12 +74,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.UNMETERED)
             .build()
-        val request = PeriodicWorkRequestBuilder<FindReleaseWorker>(1, TimeUnit.DAYS)
+        val request = PeriodicWorkRequestBuilder<FindReleaseWorker>(3, TimeUnit.DAYS)
             .setConstraints(constraints)
             .build()
-        WorkManager.getInstance(applicationContext).enqueue(request)
-        WorkManager.getInstance(applicationContext).getWorkInfoByIdLiveData(request.id)
-            .observe(this, { info -> Log.i(LOG, "Worker: ${info.state}") })
+        WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
+            "release_work",
+            ExistingPeriodicWorkPolicy.KEEP, request
+        )
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
