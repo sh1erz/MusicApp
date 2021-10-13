@@ -140,7 +140,6 @@ class AudioPlayerService : Service() {
                     .build()
             )
             try {
-                //todo  network issues
                 setDataSource(url)
             } catch (ex: IllegalArgumentException) {
                 Log.i(LOG, "initMediaPlayer: ${ex.message}")
@@ -149,6 +148,10 @@ class AudioPlayerService : Service() {
             }
             prepare()
             start()
+            setOnErrorListener { mp, what, extra ->
+                Log.i(LOG, "MEDIAPLAYER ERR: $what")
+                false
+            }
             setOnCompletionListener {
                 stopForeground(true)
                 stopSelf()

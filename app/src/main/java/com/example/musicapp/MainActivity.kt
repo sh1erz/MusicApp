@@ -56,7 +56,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        initWorker()
     }
 
     private fun getToken(){
@@ -93,10 +92,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
             "release_switch" -> {
                 val sendRelease = PreferenceManager.getDefaultSharedPreferences(application)
-                    .getBoolean(key,true)
-                if (!sendRelease){
-                    WorkManager.getInstance(applicationContext).cancelUniqueWork(WORKER)
-                }
+                    .getBoolean(key, true)
+                if (sendRelease)
+                    initWorker()
+                else WorkManager.getInstance(applicationContext).cancelUniqueWork(WORKER)
             }
         }
     }

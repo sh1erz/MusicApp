@@ -12,7 +12,7 @@
     <PreferenceCategory
         android:title="Notifications">
         <SwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:title="Receive release notifications"
             android:key="release_switch" />
         <ListPreference
