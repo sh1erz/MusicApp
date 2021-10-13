@@ -14,12 +14,13 @@ import androidx.cursoradapter.widget.CursorAdapter
 import androidx.cursoradapter.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import com.example.musicapp.LOG
-import com.example.musicapp.R
 import com.example.data.entities.Artist
 import com.example.data.entities.Searchable
 import com.example.data.entities.Track
+import com.example.musicapp.LOG
+import com.example.musicapp.R
 import com.example.musicapp.databinding.FragmentSearchBinding
 import com.example.musicapp.ui.adapters.OnArtistClickListener
 import com.example.musicapp.ui.adapters.OnTrackClickListener
@@ -39,7 +40,9 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
     private val viewModel: SearchViewModel by activityViewModels()
     private lateinit var cursorAdapter: SimpleCursorAdapter
     private val disposables = CompositeDisposable()
-        private val subscriber = object : Observer<List<String>> {
+    private var isTablet: Boolean = false
+    private lateinit var navHostFragment: NavHostFragment
+    private val subscriber = object : Observer<List<String>> {
         override fun onNext(names: List<String>) {
             val cursor = MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
             names.forEachIndexed { index, s ->
@@ -61,22 +64,28 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
     }
 
     override fun onArtistItemClick(artist: Artist) {
-        findNavController().navigate(
-            R.id.action_search_to_artistDetails,
-            bundleOf(ArtistFragment.ARTIST to artist)
-        )
+        val bundle = bundleOf(ArtistFragment.ARTIST to artist)
+        if (isTablet)
+            navHostFragment.navController.navigate(R.id.artistFragment, bundle)
+        else
+            findNavController().navigate(
+                R.id.action_search_to_artistDetails,
+                bundle
+            )
     }
 
     override fun onTrackItemClick(track: Track) {
-        findNavController().navigate(
-            R.id.action_search_to_trackDetails,
-            bundleOf(TrackFragment.TRACK to track)
-        )
+        val bundle = bundleOf(TrackFragment.TRACK to track)
+        if (isTablet)
+            navHostFragment.navController.navigate(R.id.trackFragment, bundle)
+        else
+            findNavController().navigate(R.id.action_search_to_trackDetails, bundle)
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        isTablet = resources.getBoolean(R.bool.isTablet)
         setHasOptionsMenu(true)
     }
 
@@ -90,11 +99,16 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (isTablet) {
+            navHostFragment =
+                childFragmentManager.findFragmentById(R.id.search_nav_container) as NavHostFragment
+
+        }
         cursorAdapter = getAdapter()
         Log.i(LOG, "onViewCreated: $viewModel")
         binding.recyclerSearch.adapter = SearchAdapter(mutableListOf(), this, this)
         viewModel.searchedList.observe(viewLifecycleOwner) { items ->
-                reloadList(items)
+            reloadList(items)
         }
     }
 
@@ -114,7 +128,7 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
 
         searchView.suggestionsAdapter = cursorAdapter
 
-        viewModel.publishSubject.debounce(500, TimeUnit.MILLISECONDS)
+        viewModel.publishSubject.debounce(1000, TimeUnit.MILLISECONDS)
             .switchMap { query -> viewModel.updateSuggestions(query) }
             .subscribe(subscriber)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
