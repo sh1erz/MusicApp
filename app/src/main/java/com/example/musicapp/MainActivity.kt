@@ -78,17 +78,26 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             .setConstraints(constraints)
             .build()
         WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
-            "release_work",
+            WORKER,
             ExistingPeriodicWorkPolicy.KEEP, request
         )
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        if (key == "theme") {
-            theme =
-                PreferenceManager.getDefaultSharedPreferences(application).getString(key, "Light")!!
-            setTheme(theme)
-
+        when (key ) {
+            "theme" -> {
+                theme =
+                    PreferenceManager.getDefaultSharedPreferences(application)
+                        .getString(key, "Light")!!
+                setTheme(theme)
+            }
+            "release_switch" -> {
+                val sendRelease = PreferenceManager.getDefaultSharedPreferences(application)
+                    .getBoolean(key,true)
+                if (!sendRelease){
+                    WorkManager.getInstance(applicationContext).cancelUniqueWork(WORKER)
+                }
+            }
         }
     }
 
@@ -117,6 +126,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     override fun onDestroy() {
         super.onDestroy()
         Log.i(LOG, "onDestroy: activity")
+    }
+
+    companion object{
+        const val WORKER = "release_work"
     }
 
 }
