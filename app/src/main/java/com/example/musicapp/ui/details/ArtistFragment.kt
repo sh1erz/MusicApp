@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.transition.TransitionInflater
+import com.bumptech.glide.Glide
 import com.example.data.entities.Artist
 import com.example.musicapp.LOG
 import com.example.musicapp.databinding.FragmentArtistBinding
-import com.squareup.picasso.Picasso
 
 
 class ArtistFragment : Fragment() {
@@ -39,7 +39,7 @@ class ArtistFragment : Fragment() {
         arguments?.getParcelable<Artist>(ARTIST)?.let { artist ->
             binding.apply {
                 imgArtist.transitionName = artist.picture_xl
-                Picasso.with(context)
+                Glide.with(this@ArtistFragment)
                     .load(artist.picture_xl)
                     .into(imgArtist)
                 tvName.text = artist.name

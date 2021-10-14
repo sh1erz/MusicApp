@@ -13,13 +13,13 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.transition.TransitionInflater
+import com.bumptech.glide.Glide
 import com.example.data.entities.Track
+import com.example.data_android.MusicRepository
 import com.example.musicapp.LOG
 import com.example.musicapp.R
-import com.example.data_android.MusicRepository
 import com.example.musicapp.databinding.FragmentTrackBinding
 import com.example.musicapp.services.AudioPlayerService
-import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,7 +70,7 @@ class TrackFragment : Fragment() {
             CoroutineScope(Dispatchers.IO).launch { repo.addTrackUpIfExists(track) }
             binding.apply {
                 imgTrack.transitionName = track.album.cover
-                Picasso.with(context)
+                Glide.with(this@TrackFragment)
                     .load(track.album.cover_xl)
                     .into(imgTrack)
                 tvTrackTitle.text = track.title

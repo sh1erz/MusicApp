@@ -3,6 +3,7 @@ package com.example.musicapp.ui.search
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.data.entities.Artist
 import com.example.data.entities.Searchable
 import com.example.data.entities.Track
@@ -10,7 +11,6 @@ import com.example.musicapp.databinding.ArtistItemBinding
 import com.example.musicapp.databinding.TrackItemBinding
 import com.example.musicapp.ui.adapters.OnArtistClickListener
 import com.example.musicapp.ui.adapters.OnTrackClickListener
-import com.squareup.picasso.Picasso
 
 class SearchAdapter(
     private val items: MutableList<Searchable>,
@@ -44,8 +44,9 @@ class SearchAdapter(
                 holder.artistBinding?.apply {
                     imgArtist.transitionName = artist.picture_xl
                     tvName.text = artist.name
-                    Picasso.with(imgArtist.context)
+                    Glide.with(imgArtist.context)
                         .load(artist.picture_medium)
+                        .circleCrop()
                         .into(imgArtist)
                     constraint.setOnClickListener {
                         artistListener.onArtistItemClick(artist, this)
@@ -58,7 +59,7 @@ class SearchAdapter(
                     picture.transitionName = track.album.cover
                     tvTitle.text = track.title
                     tvArtist.text = track.artist.name
-                    Picasso.with(picture.context)
+                    Glide.with(picture.context)
                         .load(track.album.cover_medium)
                         .into(picture)
                     constraint.setOnClickListener {

@@ -1,6 +1,8 @@
 package com.example.musicapp.workmanager
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -11,17 +13,17 @@ import androidx.navigation.NavDeepLinkBuilder
 import androidx.preference.PreferenceManager
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.data.entities.Track
 import com.example.data_android.MusicRepository
 import com.example.musicapp.LOG
 import com.example.musicapp.R
 import com.example.musicapp.services.NotificationUtil
 import com.example.musicapp.ui.details.TrackFragment
-import com.squareup.picasso.Picasso
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 @HiltWorker
 class FindReleaseWorker @AssistedInject constructor(
@@ -74,12 +76,23 @@ class FindReleaseWorker @AssistedInject constructor(
             .setAutoCancel(true)
             .setWhen(0)
 
-        val bmp = Picasso.with(applicationContext).load(track.album.cover).get()
-        notification.setLargeIcon(bmp)
+        Glide.with(applicationContext)
+            .asBitmap()
+            .load(track.album.cover)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    transition: Transition<in Bitmap>?
+                ) {
+                    notification.setLargeIcon(resource)
+                    with(NotificationManagerCompat.from(applicationContext)) {
+                        notify(584, notification.build())
+                    }
+                }
 
-        with(NotificationManagerCompat.from(applicationContext)) {
-            notify(584, notification.build())
-        }
+                override fun onLoadCleared(placeholder: Drawable?) {
+                }
+            })
         Log.i(LOG, "createReleaseNotification: end")
     }
 

@@ -3,11 +3,11 @@ package com.example.musicapp.ui.main.view
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.data.entities.Track
 import com.example.musicapp.databinding.TrackItemBinding
 import com.example.musicapp.ui.adapters.OnTrackClickListener
 import com.example.musicapp.ui.main.presenter.TrackAdapterDataSource
-import com.squareup.picasso.Picasso
 
 class TrackAdapter(
     private val presenter: TrackAdapterDataSource
@@ -31,7 +31,7 @@ class TrackAdapter(
         override fun setView(listener: OnTrackClickListener, track: Track) {
             with(binding){
                 picture.transitionName = track.album.cover
-                Picasso.with(picture.context)
+                Glide.with(picture)
                     .load(track.album.cover_medium)
                     .into(picture)
                 tvTitle.text = track.title

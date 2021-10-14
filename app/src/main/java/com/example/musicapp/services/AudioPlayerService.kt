@@ -1,23 +1,25 @@
 package com.example.musicapp.services
 
 import android.app.*
-import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
+import com.example.data.entities.Track
 import com.example.musicapp.LOG
 import com.example.musicapp.MainActivity
 import com.example.musicapp.R
-import com.example.data.entities.Track
 import com.example.musicapp.services.NotificationUtil.createNotificationChannel
 import com.example.musicapp.ui.details.TrackFragment.Companion.TRACK
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -99,9 +101,22 @@ class AudioPlayerService : Service() {
 
 
         CoroutineScope(Dispatchers.IO).launch {
-            val bmp = Picasso.with(this@AudioPlayerService).load(track.album.cover).get()
-            notification.setLargeIcon(bmp)
-            startForeground(1001, notification.build())
+            Glide.with(this@AudioPlayerService)
+                .asBitmap()
+                .load(track.album.cover)
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap>?
+                    ) {
+                        notification.setLargeIcon(resource)
+                        startForeground(1001, notification.build())
+                    }
+
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                    }
+                })
+
         }
     }
 
