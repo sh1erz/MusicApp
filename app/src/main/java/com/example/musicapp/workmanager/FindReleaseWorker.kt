@@ -19,6 +19,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.example.data.entities.Track
 import com.example.data_android.MusicRepository
 import com.example.musicapp.LOG
+import com.example.musicapp.MainActivity
 import com.example.musicapp.R
 import com.example.musicapp.services.NotificationUtil
 import com.example.musicapp.ui.details.TrackFragment
@@ -63,6 +64,7 @@ class FindReleaseWorker @AssistedInject constructor(
 
         val pendingIntent = NavDeepLinkBuilder(applicationContext)
             .setGraph(R.navigation.nav_graph)
+            .setComponentName(MainActivity::class.java)
             .setDestination(R.id.trackFragment)
             .setArguments(bundleOf(TrackFragment.TRACK to track))
             .createPendingIntent()
