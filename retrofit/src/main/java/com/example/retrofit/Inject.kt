@@ -18,7 +18,7 @@ class RetrofitModule {
         val client = OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val request = chain.request()
-                Log.i("my_logs", "url: ${request.url()}")
+                Log.i("my_logs", "url: ${request.url()}") // TODO https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor
                 chain.proceed(request)
             }.build()
         return Retrofit.Builder()

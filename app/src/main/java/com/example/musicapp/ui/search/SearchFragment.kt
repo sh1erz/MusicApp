@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit
 class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
 
     private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding!! // TODO force unwrap https://kotlinlang.org/docs/null-safety.html#elvis-operator
     private val viewModel: SearchViewModel by activityViewModels()
     private lateinit var cursorAdapter: SimpleCursorAdapter
     private val disposables = CompositeDisposable()
@@ -141,9 +141,11 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
 
         searchView.suggestionsAdapter = cursorAdapter
 
+        // TODO ViewModel scope
         viewModel.publishSubject.debounce(1000, TimeUnit.MILLISECONDS)
             .switchMap { query -> viewModel.updateSuggestions(query) }
             .subscribe(subscriber)
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null && newText.length > 2) {

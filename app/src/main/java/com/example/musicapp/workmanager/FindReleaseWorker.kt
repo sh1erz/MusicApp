@@ -39,7 +39,7 @@ class FindReleaseWorker @AssistedInject constructor(
             try {
                 val genreId: String =
                     PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                        .getString("release_genre", "152")!!
+                        .getString("release_genre", "152")!! // TODO force unwrap https://kotlinlang.org/docs/null-safety.html#elvis-operator
                 val track = repository.getLatestReleaseTrackByGenreId(genreId.toInt())
                     ?: return Result.success()
                 createReleaseNotification(track)
