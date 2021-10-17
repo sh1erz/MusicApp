@@ -31,7 +31,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         theme =
-            PreferenceManager.getDefaultSharedPreferences(application).getString("theme", "Light")!! // TODO force unwrap https://kotlinlang.org/docs/null-safety.html#elvis-operator
+            PreferenceManager.getDefaultSharedPreferences(application).getString("theme", "Light")
+                ?: "Light"
 
         when(theme){
             "Light" -> setTheme(R.style.Theme_MusicApp)
@@ -87,7 +88,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             "theme" -> {
                 theme =
                     PreferenceManager.getDefaultSharedPreferences(application)
-                        .getString(key, "Light")!! // TODO force unwrap https://kotlinlang.org/docs/null-safety.html#elvis-operator
+                        .getString(key, "Light") ?: "Light"
                 setTheme(theme)
             }
             "release_switch" -> {
@@ -103,7 +104,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     override fun getTheme(): Resources.Theme {
         val theme = super.getTheme()
         val themeName = this.theme ?: PreferenceManager.getDefaultSharedPreferences(application)
-            .getString("theme", "Light")!! // TODO force unwrap https://kotlinlang.org/docs/null-safety.html#elvis-operator
+            .getString("theme", "Light") ?: "Light"
         when (themeName) {
             "Light" -> theme.applyStyle(R.style.Theme_MusicApp, true)
             "Classic" -> theme.applyStyle(R.style.Theme_MusicApp_Classic, true)

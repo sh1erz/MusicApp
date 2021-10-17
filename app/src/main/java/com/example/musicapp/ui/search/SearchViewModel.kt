@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.data.entities.Searchable
 import com.example.musicapp.LOG
 import com.example.data_android.MusicRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,27 +13,25 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(private val musicRepository: MusicRepository) :
     ViewModel() {
 
-    private val _searchedList = MutableLiveData<List<com.example.data.entities.Searchable>>(listOf())
+    private val _searchedList = MutableLiveData<List<Searchable>>(listOf())
     val searchedList
         get() = _searchedList
-    val publishSubject: PublishSubject<String> = PublishSubject.create()
-
-    fun getTrackById(id:Long) = musicRepository.getTrackById(id)
-
-    fun addTrack(track: com.example.data.entities.Track) =
-        viewModelScope.launch(Dispatchers.IO) { musicRepository.addTrackUpIfExists(track) }
+    val publisher = PublishSubject.create<String>()
+    val searchObservable: Observable<List<String>> = publisher.debounce(1000, TimeUnit.MILLISECONDS)
+        .switchMap { query -> updateSuggestions(query) }
 
     fun search(query: String) = viewModelScope.launch(Dispatchers.IO) {
         try {
             val artists = musicRepository.searchArtists(query, limit = 3)
             val tracks = musicRepository.searchTracks(query)
-            val list = mutableListOf<com.example.data.entities.Searchable>()
+            val list = mutableListOf<Searchable>()
             list.apply {
                 addAll(artists.data)
                 addAll(tracks.data)
@@ -43,7 +42,7 @@ class SearchViewModel @Inject constructor(private val musicRepository: MusicRepo
         }
     }
 
-    fun updateSuggestions(query: String): Observable<List<String>> {
+    private fun updateSuggestions(query: String): Observable<List<String>> {
         return Observable.create { e ->
             viewModelScope.launch(Dispatchers.IO) {
                 try {

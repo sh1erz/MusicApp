@@ -33,13 +33,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observer
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
 
     private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!! // TODO force unwrap https://kotlinlang.org/docs/null-safety.html#elvis-operator
+    private val binding
+        get() = _binding
+            ?: throw UninitializedPropertyAccessException("${this::class.simpleName}: _binding was not initialised")
     private val viewModel: SearchViewModel by activityViewModels()
     private lateinit var cursorAdapter: SimpleCursorAdapter
     private val disposables = CompositeDisposable()
@@ -59,11 +60,21 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
         }
 
         override fun onError(e: Throwable) {
-            Log.i(LOG, "  -- subscriber onError err: ${e.message ?: "no mess"}")
+            Log.i(LOG, "subscriber onError err: ${e.message ?: "no mess"}")
         }
 
         override fun onComplete() {
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.searchObservable.subscribe(subscriber)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        disposables.dispose()
     }
 
     override fun onArtistItemClick(artist: Artist, binding: ArtistItemBinding) {
@@ -125,6 +136,8 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
         }
     }
 
+
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
@@ -141,15 +154,10 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
 
         searchView.suggestionsAdapter = cursorAdapter
 
-        // TODO ViewModel scope
-        viewModel.publishSubject.debounce(1000, TimeUnit.MILLISECONDS)
-            .switchMap { query -> viewModel.updateSuggestions(query) }
-            .subscribe(subscriber)
-
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null && newText.length > 2) {
-                    viewModel.publishSubject.onNext(newText)
+                    viewModel.publisher.onNext(newText)
                 }
                 return true
             }
@@ -199,7 +207,6 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        disposables.dispose()
     }
 
 
