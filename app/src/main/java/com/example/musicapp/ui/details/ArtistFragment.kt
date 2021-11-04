@@ -3,9 +3,11 @@ package com.example.musicapp.ui.details
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.transition.TransitionInflater
 import com.bumptech.glide.Glide
 import com.example.data.entities.Artist
@@ -20,7 +22,7 @@ class ArtistFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i(LOG, "Artist fragment onCreate")
+        setHasOptionsMenu(true)
         sharedElementEnterTransition =
             TransitionInflater.from(context).inflateTransition(android.R.transition.move)
     }
@@ -46,6 +48,13 @@ class ArtistFragment : Fragment() {
                 tvLink.text = artist.link.toString()
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == android.R.id.home) {
+            findNavController().navigateUp()
+            true
+        } else super.onOptionsItemSelected(item)
     }
 
     override fun onDestroyView() {

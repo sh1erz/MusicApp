@@ -67,16 +67,6 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.searchObservable.subscribe(subscriber)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        disposables.dispose()
-    }
-
     override fun onArtistItemClick(artist: Artist, binding: ArtistItemBinding) {
         val bundle = bundleOf(ArtistFragment.ARTIST to artist)
         if (isTablet) {
@@ -134,6 +124,7 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
         viewModel.searchedList.observe(viewLifecycleOwner) { items ->
             reloadList(items)
         }
+        viewModel.searchObservable.subscribe(subscriber)
     }
 
 
@@ -207,6 +198,8 @@ class SearchFragment : Fragment(), OnArtistClickListener, OnTrackClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        Log.i(LOG, "onDestroyView: $subscriber")
+        disposables.dispose()
     }
 
 

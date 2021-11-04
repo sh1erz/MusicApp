@@ -8,10 +8,12 @@ import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.transition.TransitionInflater
 import com.bumptech.glide.Glide
 import com.example.data.entities.Track
@@ -49,6 +51,7 @@ class TrackFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         sharedElementEnterTransition =
             TransitionInflater.from(context).inflateTransition(android.R.transition.move)
     }
@@ -119,9 +122,11 @@ class TrackFragment : Fragment() {
         const val TRACK = "track"
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.i(LOG, "track fragm onResume")
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == android.R.id.home) {
+            findNavController().navigateUp()
+            true
+        } else super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {
