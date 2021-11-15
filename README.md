@@ -3,6 +3,8 @@ Streaming music service for Android devices. History of listened tracks. Notific
 
 ### Used technologies:
 
+- Room
+- LiveData
 - Jetpack Navigation
 - MVP
 - MVVM
